@@ -1,0 +1,19 @@
+RWiener R package
+The RWiener package is an extension for R, which provides wiener
+process distribution functions, namely the Wiener first passage time
+density, CDF, quantile and random functions. 
+
+dwiener(q, alpha,tau,beta,delta, resp="upper")
+pwiener(q, alpha,tau,beta,delta, resp="upper")
+qwiener(p, alpha,tau,beta,delta, resp="upper")
+rwiener(n, alpha,tau,beta,delta)
+ 
+With the parameters:
+  - q being a quantile
+  - p being the CDF value between 0 and 1
+  - n being an integer value > 0
+  - resp determining if it's for the "upper" or "lower" (i.e. error) boundary
+  - alpha being the boundary separation parameter
+  - tau being the non-decision time
+  - beta being the bias
+  - delta being the driftrate
