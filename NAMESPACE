@@ -1,0 +1,12 @@
+useDynLib(RWiener, dwiener_c = dwiener, 
+                   pwiener_c = pwiener, 
+                   pwiener_full_c = pwiener_full, 
+                   qwiener_c = qwiener, 
+                   qwiener_full_c = qwiener_full, 
+                   rwiener_c = rwiener)
+export (
+dwiener,
+pwiener,
+qwiener,
+rwiener
+)

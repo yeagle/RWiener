@@ -16,4 +16,4 @@ With the parameters:
   - alpha being the boundary separation parameter
   - tau being the non-decision time
   - beta being the bias
-  - delta being the driftrate
+  - delta being the drift rate

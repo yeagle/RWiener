@@ -13,12 +13,12 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper")
                                                       values")
 
   if (resp == "upper") 
-    d <- .Call("dwiener", q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    d <- .Call(dwiener_c, q, alpha,tau,beta,delta)
   else if (resp == "lower") 
-    d <- .Call("dwiener", -q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    d <- .Call(dwiener_c, -q, alpha,tau,beta,delta)
   else if (resp == "both") 
-    d <- .Call("dwiener", q, alpha,tau,beta,delta, PACKAGE="RWiener") +
-         .Call("dwiener", -q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    d <- .Call(dwiener_c, q, alpha,tau,beta,delta) +
+         .Call(dwiener_c, -q, alpha,tau,beta,delta)
   else stop("resp must be either 'lower', 'upper' or 'both'")
 
   return(d)
@@ -31,11 +31,11 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
                                                       values")
 
   if (resp == "upper") 
-    q <- .Call("pwiener", q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    q <- .Call(pwiener_c, q, alpha,tau,beta,delta)
   else if (resp == "lower")
-    q <- .Call("pwiener", -q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    q <- .Call(pwiener_c, -q, alpha,tau,beta,delta)
   else if (resp == "both")
-    q <- .Call("pwiener_full", q, alpha,tau,beta,delta, PACKAGE="RWiener")
+    q <- .Call(pwiener_full_c, q, alpha,tau,beta,delta)
   else stop("resp must be either 'lower', 'upper' or 'both'")
 
   return(q)
@@ -48,11 +48,11 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
                                                       values")
 
   if (resp == "upper")
-    p <- .Call("qwiener", p, alpha,tau,beta,delta, PACKAGE="RWiener")
+    p <- .Call(qwiener_c, p, alpha,tau,beta,delta)
   else if (resp == "lower")
-    p <- .Call("qwiener", -p, alpha,tau,beta,delta, PACKAGE="RWiener")
+    p <- .Call(qwiener_c, -p, alpha,tau,beta,delta)
   else if (resp == "both")
-    p <- .Call("qwiener_full", p, alpha,tau,beta,delta, PACKAGE="RWiener")
+    p <- .Call(qwiener_full_c, p, alpha,tau,beta,delta)
   else stop("resp must be either 'lower', 'upper' or 'both'")
 
   return(p)
@@ -66,7 +66,7 @@ rwiener <- function(n, alpha,tau,beta,delta)
   rdat <- data.frame(q=vector(),resp=factor(levels=c("upper", "lower")))
 
   for (i in 1:n) {
-    r <- c(r, .Call("rwiener", alpha,tau,beta,delta, PACKAGE="RWiener"))
+    r <- .Call(rwiener_c, alpha,tau,beta,delta)
     if (r >= 0) rdat[i,] <- c(r,"upper")
     else rdat[i,] <- c(abs(r),"lower")
     
