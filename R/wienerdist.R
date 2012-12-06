@@ -9,8 +9,8 @@ check_wiener_pars <- function(alpha,tau,beta,delta)
 dwiener <- function(q, alpha,tau,beta,delta, resp="upper") 
 {
   if (q<0) stop("q must be > 0!")
-  if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                      values")
+  if (!check_wiener_pars(alpha,tau,beta,delta)) 
+    stop("bad parameter values!")
 
   if (resp == "upper") 
     d <- .Call(dwiener_c, q, alpha,tau,beta,delta)

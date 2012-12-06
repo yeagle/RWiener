@@ -6,7 +6,8 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
-CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS` \ 
+        -Wall -pedantic
 LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
 
 AC_PROG_CC
