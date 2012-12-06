@@ -17,3 +17,6 @@ With the parameters:
   - tau being the non-decision time
   - beta being the bias
   - delta being the drift rate
+
+LICENSE:
+http://www.r-project.org/Licenses/GPL-2
