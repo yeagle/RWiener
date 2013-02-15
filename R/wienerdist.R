@@ -16,52 +16,64 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper")
  ##return(out$d)
  #return(d);
 
-  if (q<0) stop("q must be > 0!")
-  if (!check_wiener_pars(alpha,tau,beta,delta)) 
-    stop("bad parameter values!")
+  d <- vector("double", length=length(q))
+  for (i in 1:length(q)) {
+    if (q[i]<0) stop("q must be > 0!")
+    if (!check_wiener_pars(alpha,tau,beta,delta)) 
+      stop("bad parameter values!")
 
-  if (resp == "upper") 
-    d <- .Call(dwiener_c, q, alpha,tau,beta,delta)
-  else if (resp == "lower") 
-    d <- .Call(dwiener_c, -q, alpha,tau,beta,delta)
-  else if (resp == "both") 
-    d <- .Call(dwiener_c, q, alpha,tau,beta,delta) +
-         .Call(dwiener_c, -q, alpha,tau,beta,delta)
-  else stop("resp must be either 'lower', 'upper' or 'both'")
+    if (resp == "upper") 
+      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta)
+    else if (resp == "lower") 
+      d[i] <- .Call(dwiener_c, -q[i], alpha,tau,beta,delta)
+    else if (resp == "both") 
+      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta) +
+           .Call(dwiener_c, -q[i], alpha,tau,beta,delta)
+    else stop("resp must be either 'lower', 'upper' or 'both'")
+    if(is.nan(d[i])) d[i] <- 0
+  }
 
   return(d)
 }
 
 pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 {
-  if (q<0) stop("q must be > 0!")
-  if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                      values")
+  p <- vector("double", length=length(q))
+  for (i in 1:length(q)) {
+    if (q[i]<0) stop("q must be > 0!")
+    if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
+                                                        values")
 
-  if (resp == "upper") 
-    q <- .Call(pwiener_c, q, alpha,tau,beta,delta)
-  else if (resp == "lower")
-    q <- .Call(pwiener_c, -q, alpha,tau,beta,delta)
-  else if (resp == "both")
-    q <- .Call(pwiener_full_c, q, alpha,tau,beta,delta)
-  else stop("resp must be either 'lower', 'upper' or 'both'")
+    if (resp == "upper") 
+      p[i] <- .Call(pwiener_c, q[i], alpha,tau,beta,delta)
+    else if (resp == "lower")
+      p[i] <- .Call(pwiener_c, -q[i], alpha,tau,beta,delta)
+    else if (resp == "both")
+      p[i] <- .Call(pwiener_full_c, q[i], alpha,tau,beta,delta)
+    else stop("resp must be either 'lower', 'upper' or 'both'")
+    if(is.nan(p[i])) p[i] <- 0
+  }
 
-  return(q)
+  return(p)
 }
 
 qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
-  if (p<0) stop("p must be > 0!")
-  if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                      values")
+  q <- vector("double", length=length(q))
+  for (i in 1:length(p)) {
+    if (p[i]<0) stop("p must be > 0!")
+    if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
+                                                        values")
 
-  if (resp == "upper")
-    q <- .Call(qwiener_c, p, alpha,tau,beta,delta)
-  else if (resp == "lower")
-    q <- .Call(qwiener_c, -p, alpha,tau,beta,delta)
-  else if (resp == "both")
-    q <- .Call(qwiener_full_c, p, alpha,tau,beta,delta)
-  else stop("resp must be either 'lower', 'upper' or 'both'")
+    if (resp == "upper")
+      q[i] <- .Call(qwiener_c, p[i], alpha,tau,beta,delta)
+    else if (resp == "lower")
+      q[i] <- .Call(qwiener_c, -p[i], alpha,tau,beta,delta)
+    else if (resp == "both")
+      q[i] <- .Call(qwiener_full_c, p[i], alpha,tau,beta,delta)
+    else stop("resp must be either 'lower', 'upper' or 'both'")
+    if(is.nan(q[i])) p[i] <- 0
+  }
 
   return(q)
 }
