@@ -8,6 +8,14 @@ check_wiener_pars <- function(alpha,tau,beta,delta)
 
 dwiener <- function(q, alpha,tau,beta,delta, resp="upper") 
 {
+ ##d <- .Call(dwiener_c)
+ #print("asdf")
+ ##out <- .C("dwiener", d=as.double(5), package="RWiener")
+ #d <- .Call(dwiener_c)
+ #print("asdf2")
+ ##return(out$d)
+ #return(d);
+
   if (q<0) stop("q must be > 0!")
   if (!check_wiener_pars(alpha,tau,beta,delta)) 
     stop("bad parameter values!")
@@ -43,19 +51,19 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 
 qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
-  if (q<0) stop("q must be > 0!")
+  if (p<0) stop("p must be > 0!")
   if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
                                                       values")
 
   if (resp == "upper")
-    p <- .Call(qwiener_c, p, alpha,tau,beta,delta)
+    q <- .Call(qwiener_c, p, alpha,tau,beta,delta)
   else if (resp == "lower")
-    p <- .Call(qwiener_c, -p, alpha,tau,beta,delta)
+    q <- .Call(qwiener_c, -p, alpha,tau,beta,delta)
   else if (resp == "both")
-    p <- .Call(qwiener_full_c, p, alpha,tau,beta,delta)
+    q <- .Call(qwiener_full_c, p, alpha,tau,beta,delta)
   else stop("resp must be either 'lower', 'upper' or 'both'")
 
-  return(p)
+  return(q)
 }
 
 rwiener <- function(n, alpha,tau,beta,delta)

@@ -1,4 +1,5 @@
 #include <R.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
 double prob_upperbound(double v, double a, double w)
@@ -81,7 +82,7 @@ double F_lower(double q, double v, double a, double w)
   return F;
 }
 
-double pwiener(double q, double alpha, double tau, double beta, double delta)
+double pwiener_d(double q, double alpha, double tau, double beta, double delta)
 {
   double p;
 
@@ -100,10 +101,37 @@ double pwiener(double q, double alpha, double tau, double beta, double delta)
 }
 
 
-double pwiener_full(double q, double alpha, double tau, double beta, double delta)
+double pwiener_full_d(double q, double alpha, double tau, double beta, double delta)
 {
+  double p;
   if (q < 0) return R_NaN;
   if(!R_finite(q)) return R_PosInf; // infinity
-  return (pwiener(q, alpha,tau,beta,delta) + pwiener(-q, alpha,tau,beta,delta));
+  p = pwiener_d(q, alpha,tau,beta,delta);
+  p += pwiener_d(-q, alpha,tau,beta,delta);
+
+  return p;
 }
 
+SEXP pwiener(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta) {
+  double p;
+  SEXP value;
+
+  p =  pwiener_d(REAL(q)[0], REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0]);
+
+  PROTECT(value = allocVector(REALSXP, 1));
+  REAL(value)[0] = p;
+  UNPROTECT(1);
+  return value;
+}
+
+SEXP pwiener_full(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta) {
+  double p;
+  SEXP value;
+
+  p = pwiener_full_d(REAL(q)[0], REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0]);
+
+  PROTECT(value = allocVector(REALSXP, 1));
+  REAL(value)[0] = p;
+  UNPROTECT(1);
+  return value;
+}

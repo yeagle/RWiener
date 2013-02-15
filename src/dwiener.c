@@ -1,9 +1,10 @@
 #include <R.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
-double dwiener(double q, double alpha, double tau, double beta, double delta)
+double dwiener_d(double q, double alpha, double tau, double beta, double delta)
 {
-  double kl, ks, ans;
+  double kl, ks, ans, value_d=1;
   int k,K;
   int give_log=0;
   double err = 1e-10;
@@ -63,4 +64,16 @@ double dwiener(double q, double alpha, double tau, double beta, double delta)
   return give_log ? 
     ans+((-delta*alpha*beta -(pow(delta,2))*(q*pow(alpha,2))/2)-log(pow(alpha,2))) : 
     ans*exp(-delta*alpha*beta -(pow(delta,2))*(q*pow(alpha,2))/2)/(pow(alpha,2));
+}
+
+SEXP dwiener(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta) {
+  double d;
+  SEXP value;
+
+  d = dwiener_d(REAL(q)[0], REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0]);
+
+  PROTECT(value = allocVector(REALSXP, 1));
+  REAL(value)[0] = d;
+  UNPROTECT(1);
+  return value;
 }

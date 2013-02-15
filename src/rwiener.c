@@ -1,4 +1,5 @@
 #include <R.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
 double r_random_walk(double alpha, double tau, double beta, double delta)
@@ -6,13 +7,17 @@ double r_random_walk(double alpha, double tau, double beta, double delta)
   double dt=0.0001;
   double t,sigma=1;
   double p = .5 * (1+((delta*sqrt(dt))/sigma));
+  double a;
   //double q = .5 * (1-((mu*sqrt(dt))/sigma));
   int i = 0;
   double y = beta*alpha;
 
   while(y < alpha && y > 0)
   {
-    if(runif(0,1) <= p) y = y + sigma*sqrt(dt);
+    GetRNGstate();
+    a = unif_rand();
+    PutRNGstate();
+    if(a <= p) y = y + sigma*sqrt(dt);
     else y = y - sigma*sqrt(dt);
     i++;
   }
@@ -28,7 +33,7 @@ double r_rejection_based(double a, double ter, double z, double v)
    *  - return value double instead of void
    *  - removed *t and *x, instead returning t or -t 
    *  - added variable t (double)
-   *  - replaced GNU gsl with runif(0,1)
+   *  - replaced GNU gsl with unif_rand()
    *  - absol replaced with fabs
    *  - amin replaced with fmin
    *  - pi replaced with M_PI
@@ -37,7 +42,7 @@ double r_rejection_based(double a, double ter, double z, double v)
   zz,Aupper,Alower,radius,lambda,F,prob,tt,dir_,l,s1,s2,tnew,t_delta;
   int uu,i;
   int finish;
-  double t;
+  double t, r;
   
   a/=10;
   z/=10;
@@ -63,13 +68,20 @@ double r_rejection_based(double a, double ter, double z, double v)
       prob=exp(radius*v/D);
       prob=prob/(1+prob);
     }
-    dir_= runif(0,1)<prob ? 1 : -1;
+    GetRNGstate();
+    r = unif_rand();
+    PutRNGstate();
+    dir_= a<prob ? 1 : -1;
     l=-1;
     s2=0;
     
     while (s2>l) {
-      s2 = runif(0,1);
-      s1 = runif(0,1);
+      GetRNGstate();
+      s2 = unif_rand();
+      PutRNGstate();
+      GetRNGstate();
+      s1 = unif_rand();
+      PutRNGstate();
       tnew=0;
       t_delta=0;
       uu=0;
@@ -109,8 +121,19 @@ double r_rejection_based(double a, double ter, double z, double v)
   } /*end while (!finish) */
 }
 
-double rwiener(double alpha, double tau, double beta, double delta)
+double rwiener_d(double alpha, double tau, double beta, double delta)
 {
   return r_rejection_based(alpha, tau, beta*alpha, delta);
 }
 
+SEXP rwiener(SEXP alpha, SEXP tau, SEXP beta, SEXP delta) {
+  double r;
+  SEXP value;
+
+  r =  rwiener_d(REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0]);
+
+  PROTECT(value = allocVector(REALSXP, 1));
+  REAL(value)[0] = r;
+  UNPROTECT(1);
+  return value;
+}
