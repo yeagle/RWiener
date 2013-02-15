@@ -1,5 +1,9 @@
 check_wiener_pars <- function(alpha,tau,beta,delta)
 {
+  if(!is.real(alpha) || !is.real(tau) || 
+     !is.real(beta) || !is.real(delta)) {
+    return(FALSE)
+  }
   if(alpha > 0 & 
      tau > 0 &
      beta >= 0 & beta <= 1) return(TRUE)
@@ -16,11 +20,14 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper")
  ##return(out$d)
  #return(d);
 
+  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+      !is.real(q) || !is.character(resp)) {
+    stop("bad parameter values!")
+  }
+
   d <- vector("double", length=length(q))
   for (i in 1:length(q)) {
     if (q[i]<0) stop("q must be > 0!")
-    if (!check_wiener_pars(alpha,tau,beta,delta)) 
-      stop("bad parameter values!")
 
     if (resp == "upper") 
       d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta)
@@ -38,11 +45,14 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 
 pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 {
+  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+      !is.real(q) || !is.character(resp)) {
+    stop("bad parameter values!")
+  }
+
   p <- vector("double", length=length(q))
   for (i in 1:length(q)) {
     if (q[i]<0) stop("q must be > 0!")
-    if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                        values")
 
     if (resp == "upper") 
       p[i] <- .Call(pwiener_c, q[i], alpha,tau,beta,delta)
@@ -59,11 +69,14 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 
 qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
+  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+      !is.real(p) || !is.character(resp)) {
+    stop("bad parameter values!")
+  }
+
   q <- vector("double", length=length(q))
   for (i in 1:length(p)) {
     if (p[i]<0) stop("p must be > 0!")
-    if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                        values")
 
     if (resp == "upper")
       q[i] <- .Call(qwiener_c, p[i], alpha,tau,beta,delta)
@@ -80,8 +93,9 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 
 rwiener <- function(n, alpha,tau,beta,delta)
 {
-  if (!check_wiener_pars(alpha,tau,beta,delta)) stop("bad parameter
-                                                      values")
+  if (!check_wiener_pars(alpha,tau,beta,delta)) {
+    stop("bad parameter values!")
+  }
 
   rdat <- data.frame(q=vector(),resp=factor(levels=c("upper", "lower")))
 
