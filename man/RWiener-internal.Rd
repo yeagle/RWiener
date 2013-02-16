@@ -4,6 +4,4 @@
 \description{
   These functions are not to be used by the user.
 }
-\usage{
-}
 \keyword{RWiener internals}
