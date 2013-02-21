@@ -2,11 +2,10 @@
 #include <Rinternals.h>
 #include <Rmath.h>
 
-double dwiener_d(double q, double alpha, double tau, double beta, double delta)
+double dwiener_d(double q, double alpha, double tau, double beta, double delta, int give_log)
 {
   double kl, ks, ans, value_d=1;
   int k,K;
-  int give_log=0;
   double err = 1e-10;
 
   if (R_IsNaN(q + delta + alpha + beta + tau)) return R_NaN;
@@ -66,11 +65,17 @@ double dwiener_d(double q, double alpha, double tau, double beta, double delta)
     ans*exp(-delta*alpha*beta -(pow(delta,2))*(q*pow(alpha,2))/2)/(pow(alpha,2));
 }
 
-SEXP dwiener(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta) {
+SEXP dwiener(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP give_log) {
   double d;
   SEXP value;
 
-  d = dwiener_d(REAL(q)[0], REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0]);
+  if (REAL(q)[0] <= REAL(tau)[0]) {
+    if(LOGICAL(give_log)[0]) d = -1.0/0.0; // -inf
+    else d = 0;
+  }
+  else {
+    d = dwiener_d(REAL(q)[0], REAL(alpha)[0], REAL(tau)[0], REAL(beta)[0], REAL(delta)[0], LOGICAL(give_log)[0]);
+  }
 
   PROTECT(value = allocVector(REALSXP, 1));
   REAL(value)[0] = d;

@@ -12,7 +12,7 @@
   distribution.
 }
 \usage{
-  dwiener(q, alpha,tau,beta,delta, resp="upper")
+  dwiener(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
   pwiener(q, alpha,tau,beta,delta, resp="upper")
   qwiener(p, alpha,tau,beta,delta, resp="upper")
   rwiener(n, alpha,tau,beta,delta)
@@ -27,6 +27,7 @@
   \item{beta}{bias parameter.}
   \item{delta}{drift rate parameter.}
   \item{resp}{respone: "upper", "lower", or "both"}
+  \item{give_log}{function returns log, if this argument is TRUE}
 }
 %\details{}
 %\references{} 

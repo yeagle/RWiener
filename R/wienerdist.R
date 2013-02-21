@@ -10,16 +10,8 @@ check_wiener_pars <- function(alpha,tau,beta,delta)
   else return(FALSE)
 }
 
-dwiener <- function(q, alpha,tau,beta,delta, resp="upper") 
+dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE) 
 {
- ##d <- .Call(dwiener_c)
- #print("asdf")
- ##out <- .C("dwiener", d=as.double(5), package="RWiener")
- #d <- .Call(dwiener_c)
- #print("asdf2")
- ##return(out$d)
- #return(d);
-
   if (!check_wiener_pars(alpha,tau,beta,delta) ||
       !is.real(q) || !is.character(resp)) {
     stop("bad parameter values!")
@@ -30,12 +22,12 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper")
     if (q[i]<0) stop("q must be > 0!")
 
     if (resp == "upper") 
-      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta)
+      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta, give_log)
     else if (resp == "lower") 
-      d[i] <- .Call(dwiener_c, -q[i], alpha,tau,beta,delta)
+      d[i] <- .Call(dwiener_c, -q[i], alpha,tau,beta,delta, give_log)
     else if (resp == "both") 
-      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta) +
-           .Call(dwiener_c, -q[i], alpha,tau,beta,delta)
+      d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta, give_log) +
+           .Call(dwiener_c, -q[i], alpha,tau,beta,delta, give_log)
     else stop("resp must be either 'lower', 'upper' or 'both'")
     if(is.nan(d[i])) d[i] <- 0
   }
