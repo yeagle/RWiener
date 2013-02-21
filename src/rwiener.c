@@ -71,7 +71,7 @@ double r_rejection_based(double a, double ter, double z, double v)
     GetRNGstate();
     r = unif_rand();
     PutRNGstate();
-    dir_= a<prob ? 1 : -1;
+    dir_= r<prob ? 1 : -1;
     l=-1;
     s2=0;
     
