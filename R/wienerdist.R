@@ -1,7 +1,7 @@
 check_wiener_pars <- function(alpha,tau,beta,delta)
 {
-  if(!is.real(alpha) || !is.real(tau) || 
-     !is.real(beta) || !is.real(delta)) {
+  if(!is.numeric(alpha) || !is.numeric(tau) || 
+     !is.numeric(beta) || !is.numeric(delta)) {
     return(FALSE)
   }
   if(alpha > 0 & 
@@ -13,7 +13,7 @@ check_wiener_pars <- function(alpha,tau,beta,delta)
 dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE) 
 {
   if (!check_wiener_pars(alpha,tau,beta,delta) ||
-      !is.real(q) || !is.character(resp)) {
+      !is.numeric(q) || !is.character(resp)) {
     stop("bad parameter values!")
   }
 
@@ -38,7 +38,7 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
 pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 {
   if (!check_wiener_pars(alpha,tau,beta,delta) ||
-      !is.real(q) || !is.character(resp)) {
+      !is.numeric(q) || !is.character(resp)) {
     stop("bad parameter values!")
   }
 
@@ -62,7 +62,7 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
   if (!check_wiener_pars(alpha,tau,beta,delta) ||
-      !is.real(p) || !is.character(resp)) {
+      !is.numeric(p) || !is.character(resp)) {
     stop("bad parameter values!")
   }
 
@@ -89,7 +89,7 @@ rwiener <- function(n, alpha,tau,beta,delta)
     stop("bad parameter values!")
   }
 
-  rdat <- data.frame(q=vector(),resp=factor(levels=c("upper", "lower")))
+  rdat <- data.frame(q=vector("double"),resp=factor(levels=c("upper", "lower")))
 
   for (i in 1:n) {
     r <- .Call(rwiener_c, alpha,tau,beta,delta)
@@ -98,5 +98,19 @@ rwiener <- function(n, alpha,tau,beta,delta)
     
   }
 
+  rdat[,1] < as.real(rdat[,1])
   return(rdat)
 }
+
+wiener_likelihood <- function(x, dat) {
+ if (!check_wiener_pars(x[1],x[2],x[3],x[4])) {
+    return(-Inf)
+  }
+  ll <- vector("double", length(dat[,1]))
+  for (i in 1:length(dat[,1])) {
+    ll[i] <- dwiener(as.real(dat[i,1]), x[1],x[2],x[3],x[4], 
+                  resp=as.character(dat[i,2]), give_log=TRUE)
+  }
+  return(sum(ll))
+}
+  

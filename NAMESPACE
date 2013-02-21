@@ -8,5 +8,6 @@ export (
 dwiener,
 pwiener,
 qwiener,
-rwiener
+rwiener,
+wiener_likelihood
 )

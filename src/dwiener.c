@@ -69,7 +69,7 @@ SEXP dwiener(SEXP q, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP give_log)
   double d;
   SEXP value;
 
-  if (REAL(q)[0] <= REAL(tau)[0]) {
+  if (fabs(REAL(q)[0]) <= REAL(tau)[0]) {
     if(LOGICAL(give_log)[0]) d = -1.0/0.0; // -inf
     else d = 0;
   }
