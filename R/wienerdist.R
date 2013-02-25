@@ -114,3 +114,13 @@ wiener_likelihood <- function(x, dat) {
   return(sum(ll))
 }
   
+wiener_deviance <- function(x, dat) {
+  -2*wiener_likelihood(x,dat)
+}
+wiener_bic <- function(x, dat) {
+  -2*wiener_likelihood(x,dat)+4*log(length(dat[,1]))
+}
+wiener_aic <- function(x, dat) {
+  -2*wiener_likelihood(x,dat)+4*2 
+}
+

@@ -9,5 +9,8 @@ dwiener,
 pwiener,
 qwiener,
 rwiener,
-wiener_likelihood
+wiener_likelihood,
+wiener_deviance,
+wiener_aic,
+wiener_bic
 )
