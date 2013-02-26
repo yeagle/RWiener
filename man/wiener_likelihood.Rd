@@ -39,7 +39,14 @@ dat <- rwiener(100,2,.3,.5,0)
 wiener_likelihood(c(2,.3,.5,0), dat)
 
 # estimate parameters with optim
-optim(c(1,.1,.1,1),wiener_deviance,dat=dat, method="Nelder-Mead")
+onm <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat, method="Nelder-Mead")
+est <- optim(onm$par,wiener_deviance,dat=dat, method="BFGS",hessian=TRUE)
+est$par # parameter estimates
+
+# the following code needs the MASS package 
+#library(MASS) # ginv - inverse of a matrix - needed
+#sqrt(diag(ginv(est$hessian))) # sd for paramerets
+
 }
 \keyword{wiener_likelihood}
 \keyword{wiener_deviance}
