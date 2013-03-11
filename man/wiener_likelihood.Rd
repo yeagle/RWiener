@@ -45,7 +45,13 @@ est$par # parameter estimates
 
 # the following code needs the MASS package 
 #library(MASS) # ginv - inverse of a matrix - needed
-#sqrt(diag(ginv(est$hessian))) # sd for paramerets
+#sqrt(diag(ginv(est$hessian))) # sd for parameters
+
+# compare two models with deviance
+wiener_deviance(c(3,.3,.5,0), dat)
+wiener_deviance(c(3,.3,.5,0.5), dat)
+# log-likelihood difference
+wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 
 }
 \keyword{wiener_likelihood}

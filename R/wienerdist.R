@@ -98,7 +98,7 @@ rwiener <- function(n, alpha,tau,beta,delta)
     
   }
 
-  rdat[,1] < as.real(rdat[,1])
+  rdat[,1] < as.double(rdat[,1])
   return(rdat)
 }
 
@@ -108,7 +108,7 @@ wiener_likelihood <- function(x, dat) {
   }
   ll <- vector("double", length(dat[,1]))
   for (i in 1:length(dat[,1])) {
-    ll[i] <- dwiener(as.real(dat[i,1]), x[1],x[2],x[3],x[4], 
+    ll[i] <- dwiener(as.double(dat[i,1]), x[1],x[2],x[3],x[4], 
                   resp=as.character(dat[i,2]), give_log=TRUE)
   }
   return(sum(ll))
