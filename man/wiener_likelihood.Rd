@@ -32,6 +32,7 @@
 %\note{}
 %\author{}
 \examples{
+### Example 1: Parameter estimation
 # generate random data
 dat <- rwiener(100,2,.3,.5,0)
 
@@ -44,14 +45,47 @@ est <- optim(onm$par,wiener_deviance,dat=dat, method="BFGS",hessian=TRUE)
 est$par # parameter estimates
 
 # the following code needs the MASS package 
-#library(MASS) # ginv - inverse of a matrix - needed
-#sqrt(diag(ginv(est$hessian))) # sd for parameters
+sqrt(diag(MASS::ginv(est$hessian))) # sd for parameters
 
+### Example 2: Simple model comparison
 # compare two models with deviance
 wiener_deviance(c(3,.3,.5,0), dat)
 wiener_deviance(c(3,.3,.5,0.5), dat)
 # log-likelihood difference
 wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
+
+### Example 3: Likelihood-Ratio-Test and Wald-Test
+# Suppose we have data from 2 conditions
+dat1 <- rwiener(100,2,.3,.5,-.5)
+dat2 <- rwiener(100,2,.3,.5,.5)
+onm1 <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat1, method="Nelder-Mead")
+est1 <- optim(onm1$par,wiener_deviance,dat=dat1, method="BFGS",hessian=TRUE)
+wiener_likelihood(est1$par,dat1)+wiener_likelihood(est1$par,dat2) # combined loglike
+model_ll <- function(pars,delta,dat1,dat2) {
+  wiener_likelihood(pars,dat1)+
+    wiener_likelihood(c(pars[1:3],pars[4]+delta),dat2)
+}
+## Likelihood ratio test
+# 0-model: delta=0; alt-model: delta=1
+model_ll(est1$par,1,dat1,dat2)
+# compute Likelihood ratio
+LR <- -2*model_ll(est1$par,0,dat1,dat2)+2*model_ll(est1$par,1,dat1,dat2)
+# compare with critical X^2(1) quantile, alpha=0.05
+LR > qchisq(0.95,1)
+# get p-value from X^2(1)
+pchisq(LR,1, lower.tail=FALSE)
+## Wald-Test
+# estimate parameter delta and test for significance
+onm2 <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat2, method="Nelder-Mead")
+est2 <- optim(onm2$par,wiener_deviance,dat=dat2, method="BFGS",hessian=TRUE)
+delta <- est2$par[4]-est1$par[4]
+# the following code needs the MASS package 
+est1.sd <- sqrt(diag(MASS::ginv(est1$hessian))) # sd for parameters
+WT <- (est1$par[4]-(est1$par[4]+delta))/est1.sd[4]
+# compare with critical quantile N(0,1), alpha=0.05
+abs(WT) > qnorm(0.975)
+# get p-value from N(0,1)
+pnorm(WT)
 
 }
 \keyword{wiener_likelihood}

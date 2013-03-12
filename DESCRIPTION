@@ -8,6 +8,7 @@ Authors@R: c(person("Dominik", "Wabersich",
 Author: Dominik Wabersich
 Maintainer: Dominik Wabersich <dominik.wabersich@gmail.com>
 Depends: R (>= 2.15.0)
+Suggests: MASS
 License: GPL (>= 2)
 URL: https://sourceforge.net/projects/rwiener/
 Description: This package provides wiener process distribution functions,
