@@ -27,8 +27,6 @@
 }
 %\details{}
 %\references{} 
-%navarro,fuss  
-%blurton, kesselmaier, gondan
 %\note{}
 %\author{}
 \examples{

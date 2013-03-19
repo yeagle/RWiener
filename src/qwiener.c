@@ -8,28 +8,24 @@ double pwiener_full_d(double q, double alpha, double tau, double beta, double de
 
 double qwiener_full_d(double p, double alpha, double tau, double beta, double delta)
 {
-  double pmin,pmax,pmid;
+  double pmid;
   double qmin,qmax,q;
 
   if (p > 1) return R_NaN;
 
   q = 1;
   qmin = 0;
-  pmin = 0;
   qmax = R_PosInf;
-  pmax = 1;
 
   int c=0;
   do {
     c++;
     pmid = pwiener_full_d(q, alpha,tau,beta,delta);
     if (fabs(p)<=pmid) { // near lower point
-      pmax = pmid;
       qmax = q;
       q = qmin + (qmax-qmin)/2;
     }
     else { // near upper point
-      pmin = pmid;
       qmin = q;
       if (R_finite(qmax)) 
         q = qmin + (qmax-qmin)/2;

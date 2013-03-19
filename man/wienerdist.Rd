@@ -10,6 +10,8 @@
   \code{qwiener} computes the quantile for a given CDF value.
   \code{rwiener} generates random quantiles from a wiener process
   distribution.
+  For all functions, the standard deviation of the diffusion process is
+  fixed to 1.
 }
 \usage{
   dwiener(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)

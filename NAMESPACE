@@ -12,5 +12,6 @@ rwiener,
 wiener_likelihood,
 wiener_deviance,
 wiener_aic,
-wiener_bic
+wiener_bic,
+wiener_plot
 )
