@@ -18,6 +18,10 @@ With the parameters:
   - beta being the bias
   - delta being the drift rate
 
+Further, the package includes functions to compute the likelihood, which
+can be used in combination with R's optim() function, to get parameter
+estimates for the model.
+
 PLEASE NOTE:
 When using this package, please cite as:
 Wabersich, D. and Vandekerckhove, J. (in preparation). Wiener diffusion
