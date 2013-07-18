@@ -21,7 +21,7 @@
 
 }
 \arguments{
-  \item{x}{vector with the four parameter values.}
+  \item{x}{vector with the four parameter values: alpha, tau, beta, delta.}
   \item{dat}{dataframe with data. Needs a reaction time column and a
   accuracy/response column.}  
 }
