@@ -5,11 +5,13 @@
 \alias{rwiener}
 \title{Wiener process distribution functions}
 \description{
-  \code{dwiener} computes the wiener first passage time density.
-  \code{pwiener} computes the CDF for the wiener first passage time density.
+  \code{dwiener} computes the wiener first passage time density, using the
+  method by Navarro and Fuss (2009).
+  \code{pwiener} computes the CDF for the wiener first passage time
+  density, using the method by Blurton et al. (2012).
   \code{qwiener} computes the quantile for a given CDF value.
   \code{rwiener} generates random quantiles from a wiener process
-  distribution.
+  distribution, based on the rejection based method by Tuerlinckx et al. (2001).
   For all functions, the standard deviation of the diffusion process is
   fixed to 1.
 }
@@ -54,3 +56,15 @@ rwiener(1, 2,0.3,0.5,0)
 \keyword{pwiener}
 \keyword{qwiener}
 \keyword{rwiener}
+
+\references{
+Blurton, S., Kesselmeier, M., & Gondan, M. (2012). Fast and accurate calculations for cumu-
+lative first-passage time distributions in Wiener diffusion models. Journal of Mathematical
+Psychology.
+
+Navarro, D., & Fuss, I. (2009). Fast and accurate calculations for first-passage times in wiener
+diffusion models. Journal of Mathematical Psychology, 53 (4), 222–230.
+
+Tuerlinckx, F., Maris, E., Ratcliff, R., & De Boeck, P. (2001). A comparison of four methods for
+simulating the diffusion process. Behavior Research Methods, 33 (4), 443–456.
+}
