@@ -12,7 +12,7 @@ double prob_upperbound(double v, double a, double w)
 
 double exp_pnorm(double a, double b)
 {
-  double r;
+  double r=0;
   if (R_IsNaN(r) && b < -5.5) r = 1/sqrt(2) * exp(a - b*b/2) * (0.5641882/b/b/b - 1/b/sqrt(M_PI));
   else r = exp(a) * pnorm(b,0,1,1,0);
   return r;

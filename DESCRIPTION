@@ -1,6 +1,6 @@
 Package: RWiener
-Version: 1.0-0
-Date: 2013-08-05
+Version: 1.0-1
+Date: 2013-08-06
 Title: Wiener process distribution functions
 Authors@R: c(person("Dominik", "Wabersich", 
                     role=c("aut", "cre"),
@@ -11,6 +11,6 @@ Depends: R (>= 2.15.0)
 Suggests: MASS
 License: GPL (>= 2)
 URL: https://sourceforge.net/projects/rwiener/
-Description: This package provides wiener process distribution functions,
+Description: This package provides Wiener process distribution functions,
   namely the Wiener first passage time density, CDF, quantile and random
   functions.

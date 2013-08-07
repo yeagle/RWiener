@@ -38,9 +38,9 @@ double r_rejection_based(double a, double ter, double z, double v)
    *  - amin replaced with fmin
    *  - pi replaced with M_PI
    */
-  double dt=1e-15,tau=.1,D=.005,totaltime,startpos,ndrt,
-  zz,Aupper,Alower,radius,lambda,F,prob,tt,dir_,l,s1,s2,tnew,t_delta;
-  int uu,i;
+  double dt=1e-15,D=.005,totaltime,startpos,
+  Aupper,Alower,radius,lambda,F,prob,tt,dir_,l,s1,s2,tnew,t_delta;
+  int uu;
   int finish;
   double t, r;
   
@@ -119,6 +119,7 @@ double r_rejection_based(double a, double ter, double z, double v)
       }
     }
   } /*end while (!finish) */
+  return t; // to avoid compiler warnings
 }
 
 double rwiener_d(double alpha, double tau, double beta, double delta)

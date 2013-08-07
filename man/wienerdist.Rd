@@ -33,12 +33,6 @@
   \item{resp}{respone: "upper", "lower", or "both"}
   \item{give_log}{function returns log, if this argument is TRUE}
 }
-%\details{}
-%\references{} 
-%navarro,fuss  
-%blurton, kesselmaier, gondan
-%\note{}
-%\author{}
 \examples{
 ## calculate density for reactiontime 1.45 and some parameters
 dwiener(1.45, 2,0.3,0.5,0)
@@ -58,13 +52,15 @@ rwiener(1, 2,0.3,0.5,0)
 \keyword{rwiener}
 
 \references{
-Blurton, S., Kesselmeier, M., & Gondan, M. (2012). Fast and accurate calculations for cumu-
-lative first-passage time distributions in Wiener diffusion models. Journal of Mathematical
-Psychology.
+Blurton, S., Kesselmeier, M., and Gondan, M. (2012). Fast and accurate
+calculations for cumulative first-passage time distributions in Wiener
+diffusion models. Journal of Mathematical Psychology.
 
-Navarro, D., & Fuss, I. (2009). Fast and accurate calculations for first-passage times in wiener
-diffusion models. Journal of Mathematical Psychology, 53 (4), 222–230.
+Navarro, D., and Fuss, I. (2009). Fast and accurate calculations for
+first-passage times in Wiener diffusion models. Journal of Mathematical
+Psychology, 53 (4), 222-230.
 
-Tuerlinckx, F., Maris, E., Ratcliff, R., & De Boeck, P. (2001). A comparison of four methods for
-simulating the diffusion process. Behavior Research Methods, 33 (4), 443–456.
+Tuerlinckx, F., Maris, E., Ratcliff, R., and De Boeck, P. (2001). A
+comparison of four methods for simulating the diffusion process. Behavior
+Research Methods, 33 (4), 443-456.
 }

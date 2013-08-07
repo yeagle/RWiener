@@ -8,14 +8,12 @@ double pwiener_full_d(double q, double alpha, double tau, double beta, double de
 
 double qwiener_full_d(double p, double alpha, double tau, double beta, double delta)
 {
-  double pmid;
-  double qmin,qmax,q;
-
   if (p > 1) return R_NaN;
 
-  q = 1;
-  qmin = 0;
-  qmax = R_PosInf;
+  double pmid;
+  double qmin=0;
+  double qmax=R_PosInf;
+  double q=1;
 
   int c=0;
   do {
@@ -41,16 +39,14 @@ double qwiener_full_d(double p, double alpha, double tau, double beta, double de
 
 double qwiener_d(double p, double alpha, double tau, double beta, double delta)
 {
-  double pmin,pmax,pmid;
-  double qmin,qmax,q;
-
   if (fabs(p) > 1) return R_NaN;
 
-  q = 1;
-  qmin = 0;
-  pmin = 0;
-  qmax = R_PosInf;
-  pmax = 1;
+  double pmin=0;
+  double pmax=1;
+  double pmid=0;
+  double qmin=0;
+  double qmax=R_PosInf;
+  double q=1;
 
   int c=0;
   do {
@@ -61,6 +57,7 @@ double qwiener_d(double p, double alpha, double tau, double beta, double delta)
       pmax = pmid;
       qmax = q;
       q = qmin + (qmax-qmin)/2;
+      pmin = pmin; // to avoid compiler warnings
     }
     else { // near upper point
       pmin = pmid;
@@ -69,6 +66,7 @@ double qwiener_d(double p, double alpha, double tau, double beta, double delta)
         q = qmin + (qmax-qmin)/2;
       else
         q = q*10;
+      pmax = pmax; // to avoid compiler warnings
     }
     if(R_IsNaN(pmid)) return R_NaN;
     if(q>=1e+10) return R_PosInf;

@@ -4,7 +4,7 @@
 
 double dwiener_d(double q, double alpha, double tau, double beta, double delta, int give_log)
 {
-  double kl, ks, ans, value_d=1;
+  double kl, ks, ans;
   int k,K;
   double err = 1e-10;
 
