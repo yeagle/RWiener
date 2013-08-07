@@ -1,6 +1,6 @@
 Package: RWiener
-Version: 1.0-1
-Date: 2013-08-06
+Version: 1.1-0
+Date: 2013-08-07
 Title: Wiener process distribution functions
 Authors@R: c(person("Dominik", "Wabersich", 
                     role=c("aut", "cre"),
