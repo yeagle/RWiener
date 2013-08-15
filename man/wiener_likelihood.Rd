@@ -16,14 +16,17 @@
 \usage{
   wiener_likelihood(x, dat)
   wiener_deviance(x, dat)
-  wiener_aic(x, dat)
-  wiener_bic(x, dat)
+  wiener_aic(x, dat, loss=NULL)
+  wiener_bic(x, dat, loss=NULL)
 
 }
 \arguments{
   \item{x}{vector with the four parameter values: alpha, tau, beta, delta.}
   \item{dat}{dataframe with data. Needs a reaction time column and a
   accuracy/response column.}  
+  \item{loss}{Defaults to NULL, which means that the default computation is
+  done by using -2*wiener_likelihood(x,dat) in the formula. If not NULL, this can be a function to replace the default -2*wiener_likelihood(x,dat)
+  in the code and use a custom function instead.}
 }
 %\details{}
 %\references{} 
@@ -84,6 +87,19 @@ wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 # abs(WT) > qnorm(0.975)
 # # get p-value from N(0,1)
 # pnorm(WT)
+
+### Example 4: Custom AIC loss function
+many_drifts <- function(x,datlist) {
+  l = 0
+  for (c in 1:length(datlist)) {
+    l = l + wiener_deviance(x[c(1,2,3,c+3)],datlist[[c]])
+  }
+  return(l)
+}
+dat1 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=0.5)
+dat2 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=1)
+datlist <- list(dat1,dat2)
+wiener_aic(x=c(2,.3,.5,.5,1), dat=datlist, loss=many_drifts)
 
 }
 \keyword{wiener_likelihood}

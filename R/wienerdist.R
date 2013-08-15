@@ -142,11 +142,30 @@ wiener_likelihood <- function(x, dat) {
 wiener_deviance <- function(x, dat) {
   -2*wiener_likelihood(x,dat)
 }
-wiener_bic <- function(x, dat) {
-  -2*wiener_likelihood(x,dat)+4*log(length(dat[,1]))
+wiener_bic <- function(x, dat, loss=NULL) {
+  if(is.null(loss)) {
+    -2*wiener_likelihood(x,dat)+4*log(length(dat[,1]))
+  }
+  else {
+    if(is.list(dat)) {
+      loss(x,dat)+length(x)*log(length(dat[[1]][,1]))
+    }
+    else if (is.data.frame(dat)) {
+      loss(x,dat)+length(x)*log(length(dat[,1]))
+    }
+    else {
+      stop("don't know how to handle the dat object!")
+    }
+
+  }
 }
-wiener_aic <- function(x, dat) {
-  -2*wiener_likelihood(x,dat)+4*2 
+wiener_aic <- function(x, dat, loss=NULL) {
+  if(is.null(loss)) {
+    -2*wiener_likelihood(x,dat)+4*2 
+  }
+  else {
+    loss(x,dat)+length(x)*2 
+  }
 }
 
 # Plot function by Rainer W. Alexandrowicz
