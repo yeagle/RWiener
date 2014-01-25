@@ -40,7 +40,7 @@ dwiener(1.45, 2,0.3,0.5,0)
 ## calculate CDF for reactiontime 1.45 and some parameters
 pwiener(1.45, 2,0.3,0.5,0)
 
-## calculate density for reactiontime 1.45 and some parameters
+## calculate quantile for CDF value of 0.5 and some parameters
 qwiener(0.5, 2,0.3,0.5,0)
 
 ## generate one random value
