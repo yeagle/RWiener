@@ -5,7 +5,7 @@ Title: Wiener Process Distribution Functions
 Authors@R: c(person("Dominik", "Wabersich", 
                     role=c("aut", "cre"),
                     email="dominik.wabersich@gmail.com"))
-Author: Dominik Wabersich
+Author: Dominik Wabersich [aut, cre]
 Maintainer: Dominik Wabersich <dominik.wabersich@gmail.com>
 Depends: R (>= 2.15.0)
 Suggests: MASS
