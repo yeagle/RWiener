@@ -28,6 +28,8 @@ Further, the package includes functions to compute the likelihood, which
 can be used in combination with R's optim() function, to get parameter
 estimates for the model.
 
+See the R man pages for more details!
+
 Please note
 -----------
 When using this package, please cite as:

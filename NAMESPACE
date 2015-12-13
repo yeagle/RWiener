@@ -13,5 +13,9 @@ wiener_likelihood,
 wiener_deviance,
 wiener_aic,
 wiener_bic,
-wiener_plot
+plot.wiener,
+wiener_plot,
+estimate
 )
+
+S3method(plot, wiener)

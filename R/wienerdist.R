@@ -124,67 +124,6 @@ rwiener <- function(n, alpha,tau,beta,delta)
   }
 
   rdat[,1] <- as.double(rdat[,1])
+  class(rdat) <- c("wiener", "data.frame")
   return(rdat)
-}
-
-wiener_likelihood <- function(x, dat) {
- if (!check_wiener_pars(x[1],x[2],x[3],x[4])) {
-    return(-Inf)
-  }
-  ll <- vector("double", length(dat[,1]))
-  for (i in 1:length(dat[,1])) {
-    ll[i] <- dwiener(as.double(dat[i,1]), x[1],x[2],x[3],x[4], 
-                  resp=as.character(dat[i,2]), give_log=TRUE)
-  }
-  return(sum(ll))
-}
-  
-wiener_deviance <- function(x, dat) {
-  -2*wiener_likelihood(x,dat)
-}
-wiener_bic <- function(x, dat, loss=NULL) {
-  if(is.null(loss)) {
-    -2*wiener_likelihood(x,dat)+4*log(length(dat[,1]))
-  }
-  else {
-    if(is.list(dat)) {
-      loss(x,dat)+length(x)*log(length(dat[[1]][,1]))
-    }
-    else if (is.data.frame(dat)) {
-      loss(x,dat)+length(x)*log(length(dat[,1]))
-    }
-    else {
-      stop("don't know how to handle the dat object!")
-    }
-
-  }
-}
-wiener_aic <- function(x, dat, loss=NULL) {
-  if(is.null(loss)) {
-    -2*wiener_likelihood(x,dat)+4*2 
-  }
-  else {
-    loss(x,dat)+length(x)*2 
-  }
-}
-
-# Plot function by Rainer W. Alexandrowicz
-wiener_plot = function(dat)  {
-  rt = as.double(dat$q)                  # response time
-  rc = as.numeric(dat$resp)              # response cat: 1=up 2=lo
-  dpos = try(density(rt[rc==1],from=0))  # density upper
-  dneg = try(density(rt[rc==2],from=0))  # density lower
-  maxt = max(pretty(max(rt)))            # overall max response time
-  maxd = max(dpos$y,dneg$y)              # overall max density
-
-  par(mar=c(0,5,0,0),mfcol=c(2,1),ask=FALSE)
-
-  plot(dpos,xlim=c(0,maxt),ylim=c(0,maxd),las=2,lwd=2,col="green3",
-      main="",ylab="",ask=FALSE)
-      rug(rt[rc== 1],col="green3")
-      mtext("Density of positive responses",side=2,line=4,cex=0.8)
-  plot(dneg,xlim=c(0,maxt),ylim=c(maxd,0),las=2,lwd=2,col="red",
-      main="",ylab="",ask=FALSE)
-      mtext("Density of negative responses",side=2,line=4,cex=0.8)
-      rug(rt[rc==2],col="red",side=3)
 }
