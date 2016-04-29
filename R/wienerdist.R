@@ -120,10 +120,10 @@ rwiener <- function(n, alpha,tau,beta,delta)
     r <- .Call(rwiener_c, alpha,tau,beta,delta)
     if (r >= 0) rdat[i,] <- c(r,"upper")
     else rdat[i,] <- c(abs(r),"lower")
-    
   }
 
   rdat[,1] <- as.double(rdat[,1])
-  class(rdat) <- c("wiener", "data.frame")
+  #rdat <- as.wiener(rdat)
+  class(rdat) <- c("dat.wiener", class(rdat))
   return(rdat)
 }

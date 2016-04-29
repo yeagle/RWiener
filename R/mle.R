@@ -1,17 +1,24 @@
-#!/usr/bin/R --silent -f
-# -*- encoding: utf-8 -*-
-# mle.R
-#
-# (c) 2015 Dominik Wabersich <dominik.wabersich [aet] gmail.com>
-# GPL 3.0+ or (cc) by-sa (http://creativecommons.org/licenses/by-sa/3.0/)
-#
-# created 2015-12-12
-# last mod 2015-12-13 15:25 DW
-#
+estfun <- function(dat, fn=nlogLik.wiener, start=NULL) {
 
-estimate <- function(dat, par=c(1,.1,.1,1), fn=wiener_deviance) {
-  est <- optim(par,fn,dat=dat, method="Nelder-Mead")
-  pars <- est$par
-  names(pars) <- c("alpha", "tau", "beta", "delta")
-  return(pars)
+  if(!is.wiener(dat)) stop("supplied data is not of class dat.wiener!")
+  if(!is.data.frame(dat)) dat <- reshape.wiener(dat)
+
+  if (is.null(start))
+  {
+    start <- c(runif(1,0,2),min(dat$q)/2,runif(1,.1,.9),runif(1,-1,1))
+  }
+
+  onm <- optim(start,fn,dat=dat, method="Nelder-Mead")
+  est <- optim(onm$par,fn,dat=dat, method="BFGS",hessian=TRUE)
+
+  rval <- list(
+    par = c("alpha"=est$par[1], "tau"=est$par[2], "beta"=est$par[3], "delta"=est$par[4]),
+    value = est$value,
+    counts = est$counts,
+    convergence = est$convergence,
+    message = est$message,
+    hessian = est$hessian
+  )
+
+  return(rval)
 }

@@ -1,0 +1,6 @@
+src/RWiener.so
+src/dwiener.o
+src/pwiener.o
+src/qwiener.o
+src/rwiener.o
+src/symbols.rds

@@ -9,13 +9,18 @@ dwiener,
 pwiener,
 qwiener,
 rwiener,
+logLik.wiener,
+nlogLik.wiener,
 wiener_likelihood,
 wiener_deviance,
 wiener_aic,
 wiener_bic,
 plot.wiener,
 wiener_plot,
-estimate
+estfun,
+is.wiener,
+as.wiener,
+reshape.wiener
 )
 
 S3method(plot, wiener)

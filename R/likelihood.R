@@ -1,15 +1,4 @@
-#!/usr/bin/R --silent -f
-# -*- encoding: utf-8 -*-
-# likelihood.R
-#
-# (c) 2015 Dominik Wabersich <dominik.wabersich [aet] gmail.com>
-# GPL 3.0+ or (cc) by-sa (http://creativecommons.org/licenses/by-sa/3.0/)
-#
-# created 2015-12-12
-# last mod 2015-12-12 12:31 DW
-#
-
-wiener_likelihood <- function(x, dat) {
+logLik.wiener <- function(x, dat) {
  if (!check_wiener_pars(x[1],x[2],x[3],x[4])) {
     return(-Inf)
   }
@@ -20,6 +9,12 @@ wiener_likelihood <- function(x, dat) {
   }
   return(sum(ll))
 }
+wiener_likelihood <- function(x, dat) {
+  warning("wiener_likelihood is deprecated, use logLik.wiener instead!")
+  logLik.wiener(x, dat)
+}
+
+nlogLik.wiener <- function(x, dat) -logLik.wiener(x, dat)
   
 wiener_deviance <- function(x, dat) {
   -2*wiener_likelihood(x,dat)
