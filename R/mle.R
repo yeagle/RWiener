@@ -1,18 +1,108 @@
-estfun <- function(dat, fn=nlogLik.wiener, start=NULL) {
+# internal function
+esvec <- function(x, fpar) {
+  if (!is.null(fpar)) {
+    if ("alpha" %in% names(fpar))
+      x[1] <- NA
+    if ("tau" %in% names(fpar)) 
+      x[2] <- NA
+    if ("beta" %in% names(fpar)) 
+      x[3] <- NA
+    if ("delta" %in% names(fpar)) 
+      x[4] <- NA
 
-  if(!is.wiener(dat)) stop("supplied data is not of class dat.wiener!")
-  if(!is.data.frame(dat)) dat <- reshape.wiener(dat)
+    x <- as.numeric(na.omit(x))
+  }
+
+  return(x)
+}
+
+# internal function
+efn <- function(x, data, fpar=NULL) {
+  object <- list(data=data)
+  par <- numeric(4)
+
+  if (is.null(fpar)) {
+    par <- x
+  }
+  else {
+    if("alpha" %in% names(fpar))
+      par[1] <- fpar["alpha"]
+    else {
+      par[1] <- x[1]
+      x <- x[-1]
+    }
+    if("tau" %in% names(fpar)) 
+      par[2] <- fpar["tau"]
+    else {
+      par[2] <- x[1]
+      x <- x[-1]
+    }
+    if("beta" %in% names(fpar)) 
+      par[3] <- fpar["beta"]
+    else {
+      par[3] <- x[1]
+      x <- x[-1]
+    }
+    if("delta" %in% names(fpar)) 
+      par[4] <- fpar["delta"]
+    else {
+      par[4] <- x[1]
+      x <- x[-1]
+    }
+  }
+  object$par <- par
+
+  rval <- nlogLik.wiener(object)
+  return(rval)
+}
+
+# internal function
+eparvec <- function(x, fpar=NULL) {
+  rval <- numeric(4)
+  names(rval) <- c("alpha", "tau", "beta", "delta")
+
+  if (!is.null(fpar)) {
+    if ("alpha" %in% names(fpar))
+      rval[1] <- NA
+    if ("tau" %in% names(fpar)) 
+      rval[2] <- NA
+    if ("beta" %in% names(fpar)) 
+      rval[3] <- NA
+    if ("delta" %in% names(fpar)) 
+      rval[4] <- NA
+  }
+
+  rval[!is.na(rval)] <- x
+  rval[is.na(rval)] <- fpar
+
+  return(rval)
+}
+
+# internal function
+estfun <- function(data, alpha=NULL, tau=NULL, beta=NULL, delta=NULL, start=NULL) {
+
+  if(!is.wiener(data)) stop("supplied data is not of class data.wiener!")
+  if(!is.data.frame(data)) data <- reshape.wiener(data)
 
   if (is.null(start))
   {
-    start <- c(runif(1,0,2),min(dat$q)/2,runif(1,.1,.9),runif(1,-1,1))
+    start <- c(runif(1,1,2),min(data$q)/3,runif(1,.2,.8),runif(1,-1,1))
   }
 
-  onm <- optim(start,fn,dat=dat, method="Nelder-Mead")
-  est <- optim(onm$par,fn,dat=dat, method="BFGS",hessian=TRUE)
+  fpar <- c("alpha"=alpha, "tau"=tau, "beta"=beta, "delta"=delta)
+  start <- esvec(start, fpar)
+
+  if (length(fpar)==3)
+    onm <- optim(start,efn,data=data,fpar=fpar, method="Brent",
+                 lower=-100, upper=100)
+  else
+    onm <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead")
+  est <- optim(onm$par,efn,data=data,fpar=fpar, method="BFGS",hessian=TRUE)
+
+  par <- eparvec(est$par, fpar)
 
   rval <- list(
-    par = c("alpha"=est$par[1], "tau"=est$par[2], "beta"=est$par[3], "delta"=est$par[4]),
+    par = par,
     value = est$value,
     counts = est$counts,
     convergence = est$convergence,

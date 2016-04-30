@@ -1,5 +1,5 @@
 # Plot function by Rainer W. Alexandrowicz
-plot.wiener <- function(x, ...)  {
+plot.data.wiener <- function(x, ...)  {
   rt = as.double(x$q)                  # response time
   rc = as.numeric(x$resp)              # response cat: 1=up 2=lo
   dpos = try(density(rt[rc==1],from=0))  # density upper
@@ -19,8 +19,6 @@ plot.wiener <- function(x, ...)  {
       rug(rt[rc==2],col="red",side=3)
 }
 
-wiener_plot <- function(dat) {
-  warning("wiener_plot is deprecated, use plot.wiener instead!")
-  plot.wiener(dat)
+plot.wiener <- function(x, ...) {
+  stop("Not yet implemented")
 }
-

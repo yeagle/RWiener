@@ -55,16 +55,16 @@ rwiener(1, 2,0.3,0.5,0)
 Wabersich, D., & Vandekerckhove, J. (2014). The RWiener package: An R
 package providing distribution functions for the Wiener diffusion model.
 The R Journal, 6(1), 49-56.
-%
-% Blurton, S., Kesselmeier, M., and Gondan, M. (2012). Fast and accurate
-% calculations for cumulative first-passage time distributions in Wiener
-% diffusion models. Journal of Mathematical Psychology.
-%
-% Navarro, D., and Fuss, I. (2009). Fast and accurate calculations for
-% first-passage times in Wiener diffusion models. Journal of Mathematical
-% Psychology, 53 (4), 222-230.
-%
-% Tuerlinckx, F., Maris, E., Ratcliff, R., and De Boeck, P. (2001). A
-% comparison of four methods for simulating the diffusion process. Behavior
-% Research Methods, 33 (4), 443-456.
+
+Blurton, S., Kesselmeier, M., and Gondan, M. (2012). Fast and accurate
+calculations for cumulative first-passage time distributions in Wiener
+diffusion models. Journal of Mathematical Psychology.
+
+Navarro, D., and Fuss, I. (2009). Fast and accurate calculations for
+first-passage times in Wiener diffusion models. Journal of Mathematical
+Psychology, 53 (4), 222-230.
+
+Tuerlinckx, F., Maris, E., Ratcliff, R., and De Boeck, P. (2001). A
+comparison of four methods for simulating the diffusion process. Behavior
+Research Methods, 33 (4), 443-456.
 }

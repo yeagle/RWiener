@@ -10,17 +10,25 @@ pwiener,
 qwiener,
 rwiener,
 logLik.wiener,
-nlogLik.wiener,
+AIC.wiener,
+BIC.wiener,
+deviance.wiener,
+wm,
+is.wiener,
+as.wiener,
+reshape.wiener,
+plot.wiener,
+plot.data.wiener,
 wiener_likelihood,
 wiener_deviance,
 wiener_aic,
 wiener_bic,
-plot.wiener,
-wiener_plot,
-estfun,
-is.wiener,
-as.wiener,
-reshape.wiener
+wiener_plot
 )
 
+S3method(logLik, wiener)
+S3method(AIC, wiener)
+S3method(BIC, wiener)
+S3method(deviance, wiener)
 S3method(plot, wiener)
+S3method(plot, data.wiener)

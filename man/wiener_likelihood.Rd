@@ -14,18 +14,19 @@
   to estimate parameters (see example below).
 }
 \usage{
-  wiener_likelihood(x, dat)
-  wiener_deviance(x, dat)
-  wiener_aic(x, dat, loss=NULL)
-  wiener_bic(x, dat, loss=NULL)
+  wiener_likelihood(x, data)
+  wiener_deviance(x, data)
+  wiener_aic(x, data, loss=NULL)
+  wiener_bic(x, data, loss=NULL)
 
 }
 \arguments{
   \item{x}{vector with the four parameter values: alpha, tau, beta, delta.}
-  \item{dat}{dataframe with data. Needs a reaction time column and a
+  \item{data}{dataframe with data. Needs a reaction time column and a
   accuracy/response column.}  
   \item{loss}{Defaults to NULL, which means that the default computation is
-  done by using -2*wiener_likelihood(x,dat) in the formula. If not NULL, this can be a function to replace the default -2*wiener_likelihood(x,dat)
+  done by using -2*wiener_likelihood(x,data) in the formula. If not NULL,
+  this can be a function to replace the default -2*wiener_likelihood(x,data)
   in the code and use a custom function instead.}
 }
 %\details{}
@@ -41,8 +42,8 @@ dat <- rwiener(100,2,.3,.5,0)
 wiener_likelihood(c(2,.3,.5,0), dat)
 
 # estimate parameters with optim
-# onm <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat, method="Nelder-Mead")
-# est <- optim(onm$par,wiener_deviance,dat=dat, method="BFGS",hessian=TRUE)
+# onm <- optim(c(1,.1,.1,1),wiener_deviance,data=dat, method="Nelder-Mead")
+# est <- optim(onm$par,wiener_deviance,data=dat, method="BFGS",hessian=TRUE)
 # est$par # parameter estimates
 #
 # # the following code needs the MASS package 
@@ -59,8 +60,8 @@ wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 # # Suppose we have data from 2 conditions
 # dat1 <- rwiener(100,2,.3,.5,-.5)
 # dat2 <- rwiener(100,2,.3,.5,.5)
-# onm1 <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat1, method="Nelder-Mead")
-# est1 <- optim(onm1$par,wiener_deviance,dat=dat1, method="BFGS",hessian=TRUE)
+# onm1 <- optim(c(1,.1,.1,1),wiener_deviance,data=dat1, method="Nelder-Mead")
+# est1 <- optim(onm1$par,wiener_deviance,data=dat1, method="BFGS",hessian=TRUE)
 # wiener_likelihood(est1$par,dat1)+wiener_likelihood(est1$par,dat2) # combined loglike
 # model_ll <- function(pars,delta,dat1,dat2) {
 #   wiener_likelihood(pars,dat1)+
@@ -77,8 +78,8 @@ wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 # pchisq(LR,1, lower.tail=FALSE)
 # ## Wald-Test
 # # estimate parameter delta and test for significance
-# onm2 <- optim(c(1,.1,.1,1),wiener_deviance,dat=dat2, method="Nelder-Mead")
-# est2 <- optim(onm2$par,wiener_deviance,dat=dat2, method="BFGS",hessian=TRUE)
+# onm2 <- optim(c(1,.1,.1,1),wiener_deviance,data=dat2, method="Nelder-Mead")
+# est2 <- optim(onm2$par,wiener_deviance,data=dat2, method="BFGS",hessian=TRUE)
 # delta <- est2$par[4]-est1$par[4]
 # # the following code needs the MASS package 
 # est1.sd <- sqrt(diag(MASS::ginv(est1$hessian))) # sd for parameters
@@ -99,10 +100,16 @@ many_drifts <- function(x,datlist) {
 dat1 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=0.5)
 dat2 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=1)
 datlist <- list(dat1,dat2)
-wiener_aic(x=c(2,.3,.5,.5,1), dat=datlist, loss=many_drifts)
+wiener_aic(x=c(2,.3,.5,.5,1), data=datlist, loss=many_drifts)
 
 }
 \keyword{wiener_likelihood}
 \keyword{wiener_deviance}
 \keyword{wiener_aic}
 \keyword{wiener_bic}
+
+\references{
+Wabersich, D., & Vandekerckhove, J. (2014). The RWiener package: An R
+package providing distribution functions for the Wiener diffusion model.
+The R Journal, 6(1), 49-56.
+}

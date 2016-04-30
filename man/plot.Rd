@@ -28,3 +28,9 @@ plot(dat)
 
 }
 \keyword{plot.wiener}
+
+\references{
+Wabersich, D., & Vandekerckhove, J. (2014). The RWiener package: An R
+package providing distribution functions for the Wiener diffusion model.
+The R Journal, 6(1), 49-56.
+}

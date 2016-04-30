@@ -1,4 +1,5 @@
-check_wiener_pars <- function(alpha,tau,beta,delta)
+# internal function
+verifypars <- function(alpha,tau,beta,delta)
 {
   if(!is.numeric(alpha) || !is.numeric(tau) || 
      !is.numeric(beta) || !is.numeric(delta)) {
@@ -12,7 +13,7 @@ check_wiener_pars <- function(alpha,tau,beta,delta)
 
 dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE) 
 {
-  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+  if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(q) || !(is.character(resp) || is.factor(resp))) {
     stop("bad parameter values!")
   }
@@ -45,7 +46,7 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
 
 pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 {
-  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+  if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(q) || !(is.character(resp) || is.factor(resp))) {
     stop("bad parameter values!")
   }
@@ -77,7 +78,7 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 
 qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
-  if (!check_wiener_pars(alpha,tau,beta,delta) ||
+  if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(p) || !(is.character(resp) || is.factor(resp))) {
     stop("bad parameter values!")
   }
@@ -110,20 +111,19 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 
 rwiener <- function(n, alpha,tau,beta,delta)
 {
-  if (!check_wiener_pars(alpha,tau,beta,delta)) {
+  if (!verifypars(alpha,tau,beta,delta)) {
     stop("bad parameter values!")
   }
 
-  rdat <- data.frame(q=vector("double"),resp=factor(levels=c("upper", "lower")))
+  rval <- data.frame(q=vector("double"),resp=factor(levels=c("upper", "lower")))
 
   for (i in 1:n) {
     r <- .Call(rwiener_c, alpha,tau,beta,delta)
-    if (r >= 0) rdat[i,] <- c(r,"upper")
-    else rdat[i,] <- c(abs(r),"lower")
+    if (r >= 0) rval[i,] <- c(r,"upper")
+    else rval[i,] <- c(abs(r),"lower")
   }
 
-  rdat[,1] <- as.double(rdat[,1])
-  #rdat <- as.wiener(rdat)
-  class(rdat) <- c("dat.wiener", class(rdat))
-  return(rdat)
+  rval[,1] <- as.double(rval[,1])
+  class(rval) <- c("data.wiener", class(rval))
+  return(rval)
 }

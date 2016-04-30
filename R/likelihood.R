@@ -1,48 +1,51 @@
-logLik.wiener <- function(x, dat) {
- if (!check_wiener_pars(x[1],x[2],x[3],x[4])) {
+logLik.wiener <- function(object, ...) {
+  data <- object$data
+  x <- object$par
+
+ if (!verifypars(x[1],x[2],x[3],x[4])) {
     return(-Inf)
   }
-  ll <- vector("double", length(dat[,1]))
-  for (i in 1:length(dat[,1])) {
-    ll[i] <- dwiener(as.double(dat[i,1]), x[1],x[2],x[3],x[4], 
-                  resp=as.character(dat[i,2]), give_log=TRUE)
+  ll <- vector("double", length(data[,1]))
+  for (i in 1:length(data[,1])) {
+    ll[i] <- dwiener(as.double(data[i,1]), x[1],x[2],x[3],x[4], 
+                  resp=as.character(data[i,2]), give_log=TRUE)
   }
   return(sum(ll))
 }
-wiener_likelihood <- function(x, dat) {
-  warning("wiener_likelihood is deprecated, use logLik.wiener instead!")
-  logLik.wiener(x, dat)
-}
 
-nlogLik.wiener <- function(x, dat) -logLik.wiener(x, dat)
+# internal function
+nlogLik.wiener <- function(object, ...) -logLik.wiener(object, ...)
   
-wiener_deviance <- function(x, dat) {
-  -2*wiener_likelihood(x,dat)
+deviance.wiener <- function(object, ...) {
+  -2*logLik.wiener(object)
 }
 
-wiener_bic <- function(x, dat, loss=NULL) {
-  if(is.null(loss)) {
-    -2*wiener_likelihood(x,dat)+4*log(length(dat[,1]))
+AIC.wiener <- function(object, ...) {
+  if(is.null(object$loss)) {
+    -2*logLik.wiener(object)+4*2 
   }
   else {
-    if(is.list(dat)) {
-      loss(x,dat)+length(x)*log(length(dat[[1]][,1]))
+    data <- object$data
+    x <- object$par
+    object$loss(x,data)+length(x)*2 
+  }
+}
+
+BIC.wiener <- function(object, ...) {
+  if(is.null(object$loss)) {
+    -2*logLik.wiener(object)+4*log(length(object$data[,1]))
+  }
+  else {
+    data <- object$data
+    x <- object$par
+    if(is.list(data)) {
+      loss(x,data)+length(x)*log(length(data[[1]][,1]))
     }
-    else if (is.data.frame(dat)) {
-      loss(x,dat)+length(x)*log(length(dat[,1]))
+    else if (is.data.frame(data)) {
+      loss(x,data)+length(x)*log(length(data[,1]))
     }
     else {
-      stop("don't know how to handle the dat object!")
+      stop("don't know how to handle the data object!")
     }
-
-  }
-}
-
-wiener_aic <- function(x, dat, loss=NULL) {
-  if(is.null(loss)) {
-    -2*wiener_likelihood(x,dat)+4*2 
-  }
-  else {
-    loss(x,dat)+length(x)*2 
   }
 }
