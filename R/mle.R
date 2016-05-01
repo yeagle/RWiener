@@ -79,17 +79,13 @@ eparvec <- function(x, fpar=NULL) {
 }
 
 # internal function
-estfun <- function(data, alpha=NULL, tau=NULL, beta=NULL, delta=NULL, start=NULL) {
-
-  if(!is.wiener(data)) stop("supplied data is not of class data.wiener!")
-  if(!is.data.frame(data)) data <- reshape.wiener(data)
+estfun <- function(data, fpar=NULL, start=NULL) {
 
   if (is.null(start))
   {
     start <- c(runif(1,1,2),min(data$q)/3,runif(1,.2,.8),runif(1,-1,1))
   }
 
-  fpar <- c("alpha"=alpha, "tau"=tau, "beta"=beta, "delta"=delta)
   start <- esvec(start, fpar)
 
   if (length(fpar)==3)
@@ -103,7 +99,7 @@ estfun <- function(data, alpha=NULL, tau=NULL, beta=NULL, delta=NULL, start=NULL
 
   rval <- list(
     par = par,
-    value = est$value,
+    logLik = -est$value,
     counts = est$counts,
     convergence = est$convergence,
     message = est$message,
