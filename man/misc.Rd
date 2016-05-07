@@ -1,12 +1,12 @@
 \name{miscellaneous wiener model functions}
-\alias{wm}
+\alias{wdm}
 \title{Wiener model parameter estimation function}
 \description{
-  \code{wm} creates parameter estimates for the four parameters
+  \code{wdm} creates parameter estimates for the four parameters
   of the wiener model.
 }
 \usage{
-  wm(data, alpha=NULL, tau=NULL, beta=NULL, delta=NULL, start=NULL)
+  wdm(data, alpha=NULL, tau=NULL, beta=NULL, delta=NULL, start=NULL)
 }
 \arguments{
   \item{data}{dataframe with data. Needs a reaction time column and a
@@ -23,7 +23,7 @@
 dat <- rwiener(100,2,.3,.5,0)
 
 # optim
-wm(dat)
+wdm(dat)
 
 }
 \keyword{estimate}

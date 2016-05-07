@@ -9,15 +9,15 @@ dwiener,
 pwiener,
 qwiener,
 rwiener,
-logLik.wiener,
-AIC.wiener,
-BIC.wiener,
-deviance.wiener,
-wm,
+logLik.wdm,
+AIC.wdm,
+BIC.wdm,
+deviance.wdm,
+wdm,
 is.wiener,
 as.wiener,
 reshape.wiener,
-plot.wiener,
+plot.wdm,
 plot.data.wiener,
 wiener_likelihood,
 wiener_deviance,
@@ -26,9 +26,9 @@ wiener_bic,
 wiener_plot
 )
 
-S3method(logLik, wiener)
-S3method(AIC, wiener)
-S3method(BIC, wiener)
-S3method(deviance, wiener)
-S3method(plot, wiener)
+S3method(logLik, wdm)
+S3method(AIC, wdm)
+S3method(BIC, wdm)
+S3method(deviance, wdm)
+S3method(plot, wdm)
 S3method(plot, data.wiener)

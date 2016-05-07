@@ -18,7 +18,3 @@ plot.data.wiener <- function(x, ...)  {
       mtext("Density of negative responses",side=2,line=4,cex=0.8)
       rug(rt[rc==2],col="red",side=3)
 }
-
-plot.wiener <- function(x, ...) {
-  stop("Not yet implemented")
-}

@@ -1,4 +1,4 @@
-logLik.wiener <- function(object, ...) {
+logLik.wdm <- function(object, ...) {
   data <- object$data
   x <- object$par
 
@@ -17,15 +17,15 @@ logLik.wiener <- function(object, ...) {
 }
 
 # internal function
-nlogLik.wiener <- function(object, ...) -logLik.wiener(object, ...)
+nlogLik.wdm <- function(object, ...) -logLik.wdm(object, ...)
   
-deviance.wiener <- function(object, ...) {
-  -2*logLik.wiener(object)
+deviance.wdm <- function(object, ...) {
+  -2*logLik.wdm(object)
 }
 
-AIC.wiener <- function(object, ...) {
+AIC.wdm <- function(object, ...) {
   if(is.null(object$loss)) {
-    -2*logLik.wiener(object)+4*2 
+    -2*logLik.wdm(object)+4*2 
   }
   else {
     data <- object$data
@@ -34,9 +34,9 @@ AIC.wiener <- function(object, ...) {
   }
 }
 
-BIC.wiener <- function(object, ...) {
+BIC.wdm <- function(object, ...) {
   if(is.null(object$loss)) {
-    -2*logLik.wiener(object)+4*log(length(object$data[,1]))
+    -2*logLik.wdm(object)+4*log(length(object$data[,1]))
   }
   else {
     data <- object$data
@@ -48,7 +48,7 @@ BIC.wiener <- function(object, ...) {
       loss(x,data)+length(x)*log(length(data[,1]))
     }
     else {
-      stop("don't know how to handle the data object!")
+      stop("Error: don't know how to handle the data object")
     }
   }
 }

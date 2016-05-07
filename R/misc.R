@@ -8,8 +8,8 @@ verifydata <- function(data) {
 }
 
 is.wiener <- function(x) {
-  rval <- (inherits(x, "data.wiener") | inherits(x, "numdata.wiener"))
-  return(rval)
+  res <- (inherits(x, "data.wiener") | inherits(x, "numdata.wiener"))
+  return(res)
 }
 
 as.wiener <- function(data, yvar=c("q", "resp")) {
@@ -30,27 +30,27 @@ reshape.wiener <- function(data, yvar=c("q", "resp"), direction="auto") {
 
   if(is.data.frame(data) & (direction %in% c("wide", "auto")))
   {
-    rval <- data[,yvar[1]]
+    res <- data[,yvar[1]]
     for (i in 1:(length(data[,1])))
     {
-      if(data[i,yvar[2]] == "upper") rval[i] <- data[i,yvar[1]]
-      else rval[i] <- -data[i,yvar[1]]
+      if(data[i,yvar[2]] == "upper") res[i] <- data[i,yvar[1]]
+      else res[i] <- -data[i,yvar[1]]
     }
-    class(rval) <- c("numdata.wiener", "numeric")
+    class(res) <- c("numdata.wiener", "numeric")
   }
   else if ((is.vector(data) | is.numeric(data)) 
            & (direction %in% c("long", "auto"))) {
-    rval <- data.frame(as.numeric(abs(data)), factor((data>0), levels=c("TRUE", "FALSE"),
+    res <- data.frame(as.numeric(abs(data)), factor((data>0), levels=c("TRUE", "FALSE"),
              labels=c("upper", "lower")))
-    colnames(rval) <- yvar[1:2]
-    class(rval) <- c("data.wiener", "data.frame")
+    colnames(res) <- yvar[1:2]
+    class(res) <- c("data.wiener", "data.frame")
   }
   else stop("Error: argument(s) not valid")
 
-  return(rval)
+  return(res)
 }
 
-wm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
+wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
                xvar=NULL, xvar.par=NULL, start=NULL) {
   # save original function call
   cl <- match.call()
@@ -69,32 +69,33 @@ wm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta
   if (!is.null(xvar)) {
     if(length(xvar)==1) {
       if(class(data[,xvar]) == "factor"){
-        rval <- list()
-        rval$par <- fpar
+        res <- list()
+        res$par <- fpar
         for (l in levels(data[,xvar])) {
           est <- estfun(data[data[,xvar]==l,yvar], fpar, start)
           est$par <- est$par[!(names(est$par) %in% names(fpar))]
           names(est$par) <- paste(l,names(est$par), sep=":")
-          rval$par <- append(rval$par, est$par)
-          rval$counts <- append(rval$counts, est$counts)
-          rval$convergence <- append(rval$convergence, est$convergence)
-          rval$message <- append(rval$message, est$message)
-          rval$hessian <- append(rval$hessian, est$hessian)
-          rval$logLik <- sum(rval$logLik, est$logLik)
+          res$par <- append(res$par, est$par)
+          res$counts <- append(res$counts, est$counts)
+          res$convergence <- append(res$convergence, est$convergence)
+          res$message <- append(res$message, est$message)
+          res$hessian <- append(res$hessian, est$hessian)
+          res$logLik <- sum(res$logLik, est$logLik)
         }
       }
     }
   }
   else
-    rval <- estfun(data[,yvar], fpar, start)
+    res <- estfun(data[,yvar], fpar, start)
 
   # prepare return object
-  rval$n <- length(data[,1])
-  rval$npar <- length(rval$par)
-  rval$data <- data
-  rval$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
+  res$n <- length(data[,1])
+  res$npar <- length(res$par)
+  res$data <- data
+  res$yvar <- yvar
+  res$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
                    "beta"=is.null(beta), "delta"=is.null(delta))
-  rval$call <- cl
-  class(rval) <- c("wiener")
-  return(rval)
+  res$call <- cl
+  class(res) <- c("wdm")
+  return(res)
 }

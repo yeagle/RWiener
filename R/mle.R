@@ -52,30 +52,30 @@ efn <- function(x, data, fpar=NULL) {
   }
   object$par <- par
 
-  rval <- nlogLik.wiener(object)
-  return(rval)
+  res <- nlogLik.wdm(object)
+  return(res)
 }
 
 # internal function
 eparvec <- function(x, fpar=NULL) {
-  rval <- numeric(4)
-  names(rval) <- c("alpha", "tau", "beta", "delta")
+  res <- numeric(4)
+  names(res) <- c("alpha", "tau", "beta", "delta")
 
   if (!is.null(fpar)) {
     if ("alpha" %in% names(fpar))
-      rval[1] <- NA
+      res[1] <- NA
     if ("tau" %in% names(fpar)) 
-      rval[2] <- NA
+      res[2] <- NA
     if ("beta" %in% names(fpar)) 
-      rval[3] <- NA
+      res[3] <- NA
     if ("delta" %in% names(fpar)) 
-      rval[4] <- NA
+      res[4] <- NA
   }
 
-  rval[!is.na(rval)] <- x
-  rval[is.na(rval)] <- fpar
+  res[!is.na(res)] <- x
+  res[is.na(res)] <- fpar
 
-  return(rval)
+  return(res)
 }
 
 # internal function
@@ -83,7 +83,7 @@ estfun <- function(data, fpar=NULL, start=NULL) {
 
   if (is.null(start))
   {
-    start <- c(runif(1,1,2),min(data$q)/3,runif(1,.2,.8),runif(1,-1,1))
+    start <- c(runif(1,1,2),min(data[,1])/3,runif(1,.2,.8),runif(1,-1,1))
   }
 
   start <- esvec(start, fpar)
@@ -97,7 +97,7 @@ estfun <- function(data, fpar=NULL, start=NULL) {
 
   par <- eparvec(est$par, fpar)
 
-  rval <- list(
+  res <- list(
     par = par,
     logLik = -est$value,
     counts = est$counts,
@@ -106,5 +106,5 @@ estfun <- function(data, fpar=NULL, start=NULL) {
     hessian = est$hessian
   )
 
-  return(rval)
+  return(res)
 }

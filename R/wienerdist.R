@@ -15,11 +15,11 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
 {
   if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(q) || !(is.character(resp) || is.factor(resp))) {
-    stop("bad parameter values!")
+    stop("bad parameter values")
   }
 
   if (!(length(resp) == length(q))) {
-    stop("argument q and resp need to be of the same length!")
+    stop("arguments q and resp need to be of the same length")
   }
 
   if(class(resp) == "factor") {
@@ -28,7 +28,7 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
 
   d <- vector("double", length=length(q))
   for (i in 1:length(q)) {
-    if (q[i]<0) stop("q must be > 0!")
+    if (q[i]<0) stop("q must be > 0")
 
     if (resp[i] == "upper") 
       d[i] <- .Call(dwiener_c, q[i], alpha,tau,beta,delta, give_log)
@@ -48,11 +48,11 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 {
   if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(q) || !(is.character(resp) || is.factor(resp))) {
-    stop("bad parameter values!")
+    stop("bad parameter values")
   }
 
   if (!(length(resp) == length(q))) {
-    stop("argument q and resp need to be of the same length!")
+    stop("arguments q and resp need to be of the same length")
   }
 
   if(class(resp) == "factor") {
@@ -61,7 +61,7 @@ pwiener <- function(q, alpha,tau,beta,delta, resp="upper")
 
   p <- vector("double", length=length(q))
   for (i in 1:length(q)) {
-    if (q[i]<0) stop("q must be > 0!")
+    if (q[i]<0) stop("q must be > 0")
 
     if (resp[i] == "upper") 
       p[i] <- .Call(pwiener_c, q[i], alpha,tau,beta,delta)
@@ -80,11 +80,11 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 {
   if (!verifypars(alpha,tau,beta,delta) ||
       !is.numeric(p) || !(is.character(resp) || is.factor(resp))) {
-    stop("bad parameter values!")
+    stop("bad parameter values")
   }
 
   if (!(length(resp) == length(p))) {
-    stop("argument p and resp need to be of the same length!")
+    stop("arguments p and resp need to be of the same length")
   }
 
   if(class(resp) == "factor") {
@@ -94,7 +94,7 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 
   q <- vector("double", length=length(q))
   for (i in 1:length(p)) {
-    if (p[i]<0) stop("p must be > 0!")
+    if (p[i]<0) stop("p must be > 0")
 
     if (resp[i] == "upper")
       q[i] <- .Call(qwiener_c, p[i], alpha,tau,beta,delta)
@@ -112,18 +112,18 @@ qwiener <- function(p, alpha,tau,beta,delta, resp="upper")
 rwiener <- function(n, alpha,tau,beta,delta)
 {
   if (!verifypars(alpha,tau,beta,delta)) {
-    stop("bad parameter values!")
+    stop("bad parameter values")
   }
 
-  rval <- data.frame(q=vector("double"),resp=factor(levels=c("upper", "lower")))
+  res <- data.frame(q=vector("double"),resp=factor(levels=c("upper", "lower")))
 
   for (i in 1:n) {
     r <- .Call(rwiener_c, alpha,tau,beta,delta)
-    if (r >= 0) rval[i,] <- c(r,"upper")
-    else rval[i,] <- c(abs(r),"lower")
+    if (r >= 0) res[i,] <- c(r,"upper")
+    else res[i,] <- c(abs(r),"lower")
   }
 
-  rval[,1] <- as.double(rval[,1])
-  class(rval) <- c("data.wiener", class(rval))
-  return(rval)
+  res[,1] <- as.double(res[,1])
+  class(res) <- c("data.wiener", class(res))
+  return(res)
 }
