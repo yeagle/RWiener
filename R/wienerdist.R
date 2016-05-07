@@ -1,4 +1,4 @@
-# internal function
+## internal function
 verifypars <- function(alpha,tau,beta,delta)
 {
   if(!is.numeric(alpha) || !is.numeric(tau) || 

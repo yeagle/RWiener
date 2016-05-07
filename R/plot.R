@@ -1,4 +1,4 @@
-# Plot function by Rainer W. Alexandrowicz
+## Plot function by Rainer W. Alexandrowicz
 plot.data.wiener <- function(x, ...)  {
   rt = as.double(x$q)                  # response time
   rc = as.numeric(x$resp)              # response cat: 1=up 2=lo

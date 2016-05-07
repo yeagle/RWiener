@@ -1,9 +1,9 @@
-# internal function
+## internal function
 verifydata <- function(data) {
-  if (is.null(data)) stop("Error: missing values (no data supplied)")
+  if (is.null(data)) stop("missing values (no data supplied)")
   if (!is.wiener(data)) {
     if (!(is.data.frame(data) | is.numeric(data))) 
-      stop("Error: supplied data in wrong format")
+      stop("supplied data in wrong format")
   }
 }
 
@@ -25,6 +25,13 @@ as.wiener <- function(data, yvar=c("q", "resp")) {
   return(data)
 }
 
+## redefine reshape function to be generic
+reshape <- function(data, ...) UseMethod("reshape")
+
+## save default reshape method from stats package
+reshape.default <- stats::reshape
+
+## wiener reshape methods
 reshape.wiener <- function(data, yvar=c("q", "resp"), direction="auto") {
   verifydata(data)
 
@@ -45,57 +52,35 @@ reshape.wiener <- function(data, yvar=c("q", "resp"), direction="auto") {
     colnames(res) <- yvar[1:2]
     class(res) <- c("data.wiener", "data.frame")
   }
-  else stop("Error: argument(s) not valid")
+  else if(("numdata.wiener" %in% class(data) & direction=="wide" )
+          | ("data.wiener" %in% class(data) & direction=="long")) {
+    res <- data
+  }
+  else warning("argument(s) not valid")
 
   return(res)
 }
 
-wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
-               xvar=NULL, xvar.par=NULL, start=NULL) {
-  # save original function call
-  cl <- match.call()
+reshape.numdata.wiener <- function(data, yvar=c("q", "resp"),
+  direction="long") {
+  reshape.wiener(data, yvar=yvar, direction=direction)
+}
+reshape.data.wiener <- function(data, yvar=c("q", "resp"), direction="wide") {
+  reshape.wiener(data, yvar=yvar, direction=direction)
+}
 
-  # prepare passed arguments
-  verifydata(data)
-  if (is.numeric(data) & is.null(xvar)) data <- reshape.wiener(data, yvar=yvar)
-  else if (length(yvar)==1) {
-    cbind(reshape.wiener(data[,yvar]),data)
-    yvar <- c("q", "resp")
-  }
-  fpar <- c("alpha"=unname(alpha), "tau"=unname(tau), 
-    "beta"=unname(beta), "delta"=unname(delta))
-
-  # estimate parameters
-  if (!is.null(xvar)) {
-    if(length(xvar)==1) {
-      if(class(data[,xvar]) == "factor"){
-        res <- list()
-        res$par <- fpar
-        for (l in levels(data[,xvar])) {
-          est <- estfun(data[data[,xvar]==l,yvar], fpar, start)
-          est$par <- est$par[!(names(est$par) %in% names(fpar))]
-          names(est$par) <- paste(l,names(est$par), sep=":")
-          res$par <- append(res$par, est$par)
-          res$counts <- append(res$counts, est$counts)
-          res$convergence <- append(res$convergence, est$convergence)
-          res$message <- append(res$message, est$message)
-          res$hessian <- append(res$hessian, est$hessian)
-          res$logLik <- sum(res$logLik, est$logLik)
-        }
-      }
-    }
-  }
-  else
-    res <- estfun(data[,yvar], fpar, start)
-
-  # prepare return object
-  res$n <- length(data[,1])
-  res$npar <- length(res$par)
-  res$data <- data
-  res$yvar <- yvar
-  res$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
-                   "beta"=is.null(beta), "delta"=is.null(delta))
-  res$call <- cl
-  class(res) <- c("wdm")
-  return(res)
+print.wdm <- function(x, ...) {
+  cat("Call:\n")
+  print(x$call)
+  cat("\n")
+  cat("Parameters:\n")
+  print(x$par)
+  cat("\n")
+  cat("Hessian:\n")
+  print(x$hessian)
+  cat("\n")
+  cat("log-Likelihood: ")
+  print(x$loglik)
+  cat("Convergence: ")
+  print(x$convergence)
 }

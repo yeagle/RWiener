@@ -1,4 +1,4 @@
-# internal function
+## internal function
 esvec <- function(x, fpar) {
   if (!is.null(fpar)) {
     if ("alpha" %in% names(fpar))
@@ -16,7 +16,7 @@ esvec <- function(x, fpar) {
   return(x)
 }
 
-# internal function
+## internal function
 efn <- function(x, data, fpar=NULL) {
   object <- list(data=data)
   par <- numeric(4)
@@ -56,7 +56,7 @@ efn <- function(x, data, fpar=NULL) {
   return(res)
 }
 
-# internal function
+## internal function
 eparvec <- function(x, fpar=NULL) {
   res <- numeric(4)
   names(res) <- c("alpha", "tau", "beta", "delta")
@@ -78,7 +78,7 @@ eparvec <- function(x, fpar=NULL) {
   return(res)
 }
 
-# internal function
+## internal function
 estfun <- function(data, fpar=NULL, start=NULL) {
 
   if (is.null(start))
@@ -93,13 +93,15 @@ estfun <- function(data, fpar=NULL, start=NULL) {
                  lower=-100, upper=100)
   else
     onm <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead")
-  est <- optim(onm$par,efn,data=data,fpar=fpar, method="BFGS",hessian=TRUE)
+  #est <- optim(onm$par,efn,data=data,fpar=fpar, method="BFGS",hessian=TRUE)
+  est <- tryCatch(optim(onm$par,efn,data=data,fpar=fpar,
+    method="BFGS",hessian=TRUE), error=function() {onm} )
 
   par <- eparvec(est$par, fpar)
 
   res <- list(
     par = par,
-    logLik = -est$value,
+    loglik = -est$value,
     counts = est$counts,
     convergence = est$convergence,
     message = est$message,

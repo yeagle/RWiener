@@ -16,7 +16,7 @@ logLik.wdm <- function(object, ...) {
   else return(object$logLik)
 }
 
-# internal function
+## internal function
 nlogLik.wdm <- function(object, ...) -logLik.wdm(object, ...)
   
 deviance.wdm <- function(object, ...) {
@@ -48,7 +48,7 @@ BIC.wdm <- function(object, ...) {
       loss(x,data)+length(x)*log(length(data[,1]))
     }
     else {
-      stop("Error: don't know how to handle the data object")
+      stop("don't know how to handle the data object")
     }
   }
 }

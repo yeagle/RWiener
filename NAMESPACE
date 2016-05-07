@@ -9,6 +9,7 @@ dwiener,
 pwiener,
 qwiener,
 rwiener,
+print.wdm,
 logLik.wdm,
 AIC.wdm,
 BIC.wdm,
@@ -16,9 +17,11 @@ deviance.wdm,
 wdm,
 is.wiener,
 as.wiener,
+reshape,
+reshape.default,
 reshape.wiener,
-plot.wdm,
-plot.data.wiener,
+reshape.data.wiener,
+reshape.numdata.wiener,
 wiener_likelihood,
 wiener_deviance,
 wiener_aic,
@@ -26,9 +29,15 @@ wiener_bic,
 wiener_plot
 )
 
+## export s3 methods
+
+S3method(print, wdm)
 S3method(logLik, wdm)
 S3method(AIC, wdm)
 S3method(BIC, wdm)
 S3method(deviance, wdm)
-S3method(plot, wdm)
 S3method(plot, data.wiener)
+S3method(reshape, default)
+S3method(reshape, wiener)
+S3method(reshape, data.wiener)
+S3method(reshape, numdata.wiener)
