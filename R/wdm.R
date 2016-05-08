@@ -220,17 +220,25 @@ estfun.wdm <- function(x, ...) {
   res <- matrix(rep(NA,4*n), n,4)
   colnames(res) <- c("alpha", "tau", "beta", "delta")
   for (i in 1:n) {
+
+    ## kappa and lambda calculations
+    kst <- kappaST(y[i,1])
+    klt <- kappaLT(y[i,1])
+    wlam <- kst - klt
+    if(wlam < 0) kappa <- kst
+    else kappa <- klt
+
     if (y[i,2] == "lower") {
-      res[i,1] <- sclalpha(y[i,1], alpha, tau, beta, delta)
-      res[i,2] <- scltau(y[i,1], alpha, tau, beta, delta)
-      res[i,3] <- sclbeta(y[i,1], alpha, tau, beta, delta)
-      res[i,4] <- scldelta(y[i,1], alpha, tau, beta, delta)
+      res[i,1] <- sclalpha(y[i,1], alpha, tau, beta, delta, wlam, kappa)
+      res[i,2] <- scltau(y[i,1], alpha, tau, beta, delta, wlam, kappa)
+      res[i,3] <- sclbeta(y[i,1], alpha, tau, beta, delta, wlam, kappa)
+      res[i,4] <- scldelta(y[i,1], alpha, tau, beta, delta, wlam, kappa)
     }
     else if (y[i,2] == "upper") {
-      res[i,1] <- sclalpha(y[i,1], alpha, tau, 1-beta, -delta)
-      res[i,2] <- scltau(y[i,1], alpha, tau, 1-beta, -delta)
-      res[i,3] <- sclbeta(y[i,1], alpha, tau, 1-beta, -delta)
-      res[i,4] <- scldelta(y[i,1], alpha, tau, 1-beta, -delta)
+      res[i,1] <- sclalpha(y[i,1], alpha, tau, 1-beta, -delta, wlam, kappa)
+      res[i,2] <- scltau(y[i,1], alpha, tau, 1-beta, -delta, wlam, kappa)
+      res[i,3] <- sclbeta(y[i,1], alpha, tau, 1-beta, -delta, wlam, kappa)
+      res[i,4] <- scldelta(y[i,1], alpha, tau, 1-beta, -delta, wlam, kappa)
     }
   }
 
@@ -270,22 +278,19 @@ fl01ST <- function(t, beta, kappa) {
 }
 
 ## internal function
-fl01 <- function(t, beta) {
-  kst <- kappaST(t)
-  klt <- kappaLT(t)
-  wlam <- kst - klt
-  if(wlam < 0) fl01ST(t, beta, kst)
-  else fl01LT(t, beta, klt)
+fl01 <- function(t, beta, wlam, kappa) {
+  if(wlam < 0) fl01ST(t, beta, kappa)
+  else fl01LT(t, beta, kappa)
 }
 
 ## internal function
-sclalpha <- function(t, alpha, tau, beta, delta) {
+sclalpha <- function(t, alpha, tau, beta, delta, wlam, kappa) {
   t <- t-tau
 
-  res <- ( -beta*delta*fl01(t/alpha**2, beta) 
+  res <- ( -beta*delta*fl01(t/alpha**2, beta, wlam, kappa) 
     * exp(-alpha*beta*delta 
     - 0.5*pow(delta, 2)*t)/pow(alpha, 2) 
-    - 2*fl01(t/alpha**2, beta)*exp(-alpha*beta*delta 
+    - 2*fl01(t/alpha**2, beta, wlam, kappa)*exp(-alpha*beta*delta 
     - 0.5*pow(delta, 2)*t)/pow(alpha, 3) 
     - 0 # 2*t*exp(-alpha*beta*delta - 0.5*pow(delta, 2)*t) * 0 
     / pow(alpha, 5) )
@@ -318,22 +323,19 @@ scl01tauST <- function(t, beta, kappa) {
 }
 
 ## internal function
-scl01tau <- function(t, beta) {
-  kst <- kappaST(t)
-  klt <- kappaLT(t)
-  wlam <- kst - klt
-  if(wlam < 0) scl01tauST(t, beta, kst)
-  else scl01tauLT(t, beta, klt)
+scl01tau <- function(t, beta, wlam, kappa) {
+  if(wlam < 0) scl01tauST(t, beta, kappa)
+  else scl01tauLT(t, beta, kappa)
 }
 
 ## internal function
-scltau <- function(t, alpha, tau, beta, delta) {
+scltau <- function(t, alpha, tau, beta, delta, wlam, kappa) {
   t <- t-tau
 
-  res <- ( 0.5*pow(delta, 2)*fl01(t/alpha**2, beta)
+  res <- ( 0.5*pow(delta, 2)*fl01(t/alpha**2, beta, wlam, kappa)
     * exp(-alpha*beta*delta - 0.5*pow(delta, 2)*t)/pow(alpha, 2) 
     - exp(-alpha*beta*delta - 0.5*pow(delta, 2)*t)
-    * scl01tau((t/alpha**2), beta)
+    * scl01tau((t/alpha**2), beta, wlam, kappa)
     / pow(alpha, 4) )
 
   return(res)
@@ -360,32 +362,29 @@ scl01betaST <- function(t, beta, kappa) {
 }
 
 ## internal function
-scl01beta <- function(t, beta) {
-  kst <- kappaST(t)
-  klt <- kappaLT(t)
-  wlam <- kst - klt
-  if(wlam < 0) scl01betaST(t, beta, kst)
-  else scl01betaLT(t, beta, klt)
+scl01beta <- function(t, beta, wlam, kappa) {
+  if(wlam < 0) scl01betaST(t, beta, kappa)
+  else scl01betaLT(t, beta, kappa)
 }
 
 ## internal function
-sclbeta <- function(t, alpha, tau, beta, delta) {
+sclbeta <- function(t, alpha, tau, beta, delta, wlam, kappa) {
   t <- t-tau
 
-  res <- ( -delta*fl01(t/alpha**2, beta)*exp(-alpha*beta*delta 
+  res <- ( -delta*fl01(t/alpha**2, beta, wlam, kappa)*exp(-alpha*beta*delta 
     - 0.5*pow(delta, 2)*t)/alpha + exp(-alpha*beta*delta 
     - 0.5*pow(delta, 2)*t)
-    * scl01beta(t, beta)
+    * scl01beta(t, beta, wlam, kappa)
     / pow(alpha, 2) )
 
   return(res)
 }
 
 ## internal function
-scldelta <- function(t, alpha, tau, beta, delta) {
+scldelta <- function(t, alpha, tau, beta, delta, wlam, kappa) {
   t <- t-tau
 
-  res <- ( (-alpha*beta - delta*t)*fl01(t/alpha**2, beta)
+  res <- ( (-alpha*beta - delta*t)*fl01(t/alpha**2, beta, wlam, kappa)
     * exp(-alpha*beta*delta - 0.5*pow(delta, 2)*t)
     / pow(alpha, 2) )
 

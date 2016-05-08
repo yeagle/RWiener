@@ -1,10 +1,12 @@
 \name{miscellaneous wiener model functions}
 \alias{is.wiener}
 \alias{as.wiener}
-\alias{reshape.numdata.wiener}
+\alias{numdata.wiener}
+\alias{data.wiener}
 \alias{reshape}
 \alias{reshape.default}
 \alias{reshape.data.wiener}
+\alias{reshape.numdata.wiener}
 \title{Miscellaneous Wiener Diffusion model functions}
 \description{
   \code{is.wiener} bla.

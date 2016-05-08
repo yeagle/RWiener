@@ -1,48 +1,54 @@
 import(
-  stats
+  "stats"
 )
 
-useDynLib(RWiener, dwiener_c = dwiener, 
-                   pwiener_c = pwiener, 
-                   pwiener_full_c = pwiener_full, 
-                   qwiener_c = qwiener, 
-                   qwiener_full_c = qwiener_full, 
-                   rwiener_c = rwiener)
+importFrom("graphics", 
+  "mtext", "par", "plot", "rug"
+)
+
+useDynLib(RWiener, 
+  dwiener_c = dwiener, 
+  pwiener_c = pwiener, 
+  pwiener_full_c = pwiener_full, 
+  qwiener_c = qwiener, 
+  qwiener_full_c = qwiener_full, 
+  rwiener_c = rwiener
+)
 
 export (
-dwiener,
-pwiener,
-qwiener,
-rwiener,
-print.wdm,
-logLik.wdm,
-AIC.wdm,
-BIC.wdm,
-deviance.wdm,
-wdm,
-estfun,
-estfun.wdm,
-is.wiener,
-as.wiener,
-reshape,
-reshape.default,
-reshape.data.wiener,
-reshape.numdata.wiener,
-wiener_likelihood,
-wiener_deviance,
-wiener_aic,
-wiener_bic,
-wiener_plot
+"dwiener",
+"pwiener",
+"qwiener",
+"rwiener",
+"print.wdm",
+"logLik.wdm",
+"AIC.wdm",
+"BIC.wdm",
+"deviance.wdm",
+"wdm",
+"estfun",
+"estfun.wdm",
+"is.wiener",
+"as.wiener",
+"reshape",
+"reshape.default",
+"reshape.data.wiener",
+"reshape.numdata.wiener",
+"wiener_likelihood",
+"wiener_deviance",
+"wiener_aic",
+"wiener_bic",
+"wiener_plot"
 )
 
 ## export s3 methods
-S3method(print, wdm)
-S3method(logLik, wdm)
-S3method(AIC, wdm)
-S3method(BIC, wdm)
-S3method(deviance, wdm)
-S3method(estfun, wdm)
-S3method(plot, data.wiener)
-S3method(reshape, default)
-S3method(reshape, data.wiener)
-S3method(reshape, numdata.wiener)
+S3method("print", "wdm")
+S3method("logLik", "wdm")
+S3method("AIC", "wdm")
+S3method("BIC", "wdm")
+S3method("deviance", "wdm")
+S3method("estfun", "wdm")
+S3method("plot", "data.wiener")
+S3method("reshape", "default")
+S3method("reshape", "data.wiener")
+S3method("reshape", "numdata.wiener")
