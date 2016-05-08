@@ -1,4 +1,4 @@
-# document with all deprecated functions, kept for backwards compatibility
+## document with all deprecated functions, kept for backwards compatibility
 
 wiener_likelihood <- function(x, data) {
   #warning("wiener_likelihood is deprecated, use logLik.wdm instead")

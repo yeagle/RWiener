@@ -4,7 +4,8 @@
 \alias{esvec}
 \alias{efn}
 \alias{cparvec}
-\alias{estfun}
+\alias{mle}
+\alias{reshape.wiener}
 \title{Wiener functions internals}
 \description{
   These functions are not to be used by the user.

@@ -7,8 +7,8 @@ verifydata <- function(data) {
   }
 }
 
-is.wiener <- function(x) {
-  res <- (inherits(x, "data.wiener") | inherits(x, "numdata.wiener"))
+is.wiener <- function(data) {
+  res <- (inherits(data, "data.wiener") | inherits(data, "numdata.wiener"))
   return(res)
 }
 
@@ -29,10 +29,13 @@ as.wiener <- function(data, yvar=c("q", "resp")) {
 reshape <- function(data, ...) UseMethod("reshape")
 
 ## save default reshape method from stats package
-reshape.default <- stats::reshape
+reshape.default <- function(data, ...) {
+  stats::reshape(data, ...)
+}
 
 ## wiener reshape methods
-reshape.wiener <- function(data, yvar=c("q", "resp"), direction="auto") {
+## internal function
+reshapewiener <- function(data, yvar=c("q", "resp"), direction="auto") {
   verifydata(data)
 
   if(is.data.frame(data) & (direction %in% c("wide", "auto")))
@@ -61,12 +64,11 @@ reshape.wiener <- function(data, yvar=c("q", "resp"), direction="auto") {
   return(res)
 }
 
-reshape.numdata.wiener <- function(data, yvar=c("q", "resp"),
-  direction="long") {
-  reshape.wiener(data, yvar=yvar, direction=direction)
+reshape.numdata.wiener <- function(data, ...) {
+  reshapewiener(data, ...)
 }
-reshape.data.wiener <- function(data, yvar=c("q", "resp"), direction="wide") {
-  reshape.wiener(data, yvar=yvar, direction=direction)
+reshape.data.wiener <- function(data, ...) {
+  reshapewiener(data, ...)
 }
 
 print.wdm <- function(x, ...) {

@@ -1,14 +1,4 @@
-#!/usr/bin/R --silent -f
-# -*- encoding: utf-8 -*-
-# wdm.R
-#
-# (c) 2016 Dominik Wabersich <dominik.wabersich [aet] gmail.com>
-# GPL 3.0+ or (cc) by-sa (http://creativecommons.org/licenses/by-sa/3.0/)
-#
-# created 2016-05-07
-# last mod 2016-05-08 00:04 DW
-#
-
+## maximum likelihood estimation of wdm model parameters
 wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
                xvar=NULL, xvar.par=NULL, start=NULL) {
   # save original function call
@@ -16,9 +6,9 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
 
   # prepare passed arguments
   verifydata(data)
-  if (is.numeric(data) & is.null(xvar)) data <- reshape.wiener(data, yvar=yvar)
+  if (is.numeric(data) & is.null(xvar)) data <- reshapewiener(data, yvar=yvar)
   else if (length(yvar)==1) {
-    cbind(reshape.wiener(data[,yvar]),data)
+    cbind(reshapewiener(data[,yvar]), data)
     yvar <- c("q", "resp")
   }
   fpar <- c("alpha"=unname(alpha), "tau"=unname(tau), 
@@ -70,14 +60,49 @@ mle <- function(data, fpar=NULL, start=NULL) {
 
   start <- esvec(start, fpar)
 
-  if (length(fpar)==3)
+  if (length(start)==0) {
+    est <- list(
+      par = fpar,
+      data = data,
+      counts = NULL,
+      convergence = NULL,
+      hessian = NULL,
+      algorithm = list(type="None (all parameters fixed)") )
+      est$value <- -logLik.wdm(est)
+  }
+  else if (length(start)==1) {
+    ## only one parameter: use 'Brent (optim)'
     est <- optim(start,efn,data=data,fpar=fpar, method="Brent",
-                 lower=-100, upper=100, hessian=TRUE)
+      lower=-100, upper=100, hessian=TRUE, control=list(maxit=2000))
+    est$algorithm <- list(type="Brent (optim)")
+  }
   else
   {
+    ## first: try 'BFGS (optim)'
     est <- tryCatch(optim(start,efn,data=data,fpar=fpar,
       method="BFGS",hessian=TRUE, control=list(maxit=2000)), 
-      error=optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000)))
+      error=function() NULL)
+    if (!is.null(est) & (est$convergence == 0)) {
+      est$algorithm <- list(type="BFGS (optim)")
+    }
+    else {
+      ## second: try 'Newton-type (nlm)'
+      est <- tryCatch(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE),
+        error=function() NULL)
+      if (!is.null(est) & (est$code < 3)) {
+        est$convergence <- code=est$code
+        est$par <- est$estimate; est$estimate <- NULL
+        est$value <- est$minimum; est$minimum <- NULL
+        est$counts <- c(iterations=est$iterations); est$iterations <- NULL
+        est$algorithm <- list(type="Newton-type (nlm)",
+          gradient=est$gradient); est$gradient <- NULL
+      }
+      else {
+        ## third: try 'Nelder-Mead (optim)'
+        est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
+        est$algorithm <- list(type="Nelder-Mead")
+      }
+    }
   }
 
   par <- eparvec(est$par, fpar)
@@ -88,7 +113,8 @@ mle <- function(data, fpar=NULL, start=NULL) {
     counts = est$counts,
     convergence = est$convergence,
     message = est$message,
-    hessian = est$hessian
+    hessian = est$hessian,
+    algorithm = est$algorithm
   )
 
   return(res)
@@ -182,13 +208,13 @@ estfun <- function(x, ...) {
   UseMethod("estfun")
 }
 
-estfun.wdm <- function(object, ...) {
-  y <- object$data[,object$yvar]
+estfun.wdm <- function(x, ...) {
+  y <- x$data[,x$yvar]
 
-  alpha <- object$par["alpha"]
-  tau <- object$par["tau"]
-  beta <- object$par["beta"]
-  delta <- object$par["delta"]
+  alpha <- x$par["alpha"]
+  tau <- x$par["tau"]
+  beta <- x$par["beta"]
+  delta <- x$par["delta"]
 
   n <- length(y[,1])
   res <- matrix(rep(NA,4*n), n,4)

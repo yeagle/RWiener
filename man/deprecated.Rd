@@ -3,7 +3,7 @@
 \alias{wiener_deviance}
 \alias{wiener_aic}
 \alias{wiener_bic}
-\title{Wiener likelihood and criterion functions}
+\title{Wiener likelihood and criterion functions (deprecated)}
 \description{
   \code{wiener_likelihood} computes the log-likelihood for given parameter
   values and data.
@@ -29,11 +29,21 @@
   this can be a function to replace the default -2*wiener_likelihood(x,data)
   in the code and use a custom function instead.}
 }
-%\details{}
-%\references{} 
-%\note{}
-%\author{}
+\details{
+  The described functions are deprecated, but still fully supported. They
+  are kept for backwards compatibility and to ensure one can reproduce the
+  examples from Wabersich & Vandekerckhove (2014). 
+  
+  These functions are simple wrapper functions for the generic R functions
+  reported below. 
+
+  The User is encouraged to use the generic R functions instead:
+  \code{logLik.wdm}, \code{deviance.wdm}, \code{AIC.wdm}, \code{BIC.wdm}.
+  See the corresponding help pages for more information on these functions.
+  }
+
 \examples{
+\dontshow{set.seed(1)}%
 ### Example 1: Parameter estimation
 ## generate random data
 dat <- rwiener(100,2,.3,.5,0)
@@ -47,7 +57,7 @@ est <- optim(onm$par,wiener_deviance,data=dat, method="BFGS",hessian=TRUE)
 est$par # parameter estimates
 
 ## the following code needs the MASS package 
-sqrt(diag(MASS::ginv(est$hessian))) # sd for parameters
+\dontrun{sqrt(diag(MASS::ginv(est$hessian)))} # sd for parameters
 
 ### Example 2: Simple model comparison
 ## compare two models with deviance
@@ -56,6 +66,7 @@ wiener_deviance(c(3,.3,.5,0.5), dat)
 ## log-likelihood difference
 wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 
+\dontrun{%
 ### Example 3: Likelihood-Ratio-Test and Wald-Test
 ## Suppose we have data from 2 conditions
 dat1 <- rwiener(100,2,.3,.5,-.5)
@@ -88,6 +99,7 @@ WT <- (est1$par[4]-(est1$par[4]+delta))/est1.sd[4]
 abs(WT) > qnorm(0.975)
 ## get p-value from N(0,1)
 pnorm(WT)
+}% 
 
 ### Example 4: Custom AIC loss function
 many_drifts <- function(x,datlist) {

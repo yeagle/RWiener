@@ -21,7 +21,6 @@ is.wiener,
 as.wiener,
 reshape,
 reshape.default,
-reshape.wiener,
 reshape.data.wiener,
 reshape.numdata.wiener,
 wiener_likelihood,
@@ -41,6 +40,5 @@ S3method(deviance, wdm)
 S3method(estfun, wdm)
 S3method(plot, data.wiener)
 S3method(reshape, default)
-S3method(reshape, wiener)
 S3method(reshape, data.wiener)
 S3method(reshape, numdata.wiener)
