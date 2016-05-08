@@ -7,8 +7,9 @@ Authors@R: c(person("Dominik", "Wabersich",
                     email="dominik.wabersich@gmail.com"))
 Author: Dominik Wabersich [aut, cre]
 Maintainer: Dominik Wabersich <dominik.wabersich@gmail.com>
-Depends: R (>= 3.2.2)
+Depends: R (>= 3.2.2) 
 Suggests: MASS
+Imports: stats
 License: GPL (>= 2)
 URL: https://sourceforge.net/projects/rwiener/
 Description: Provides Wiener process distribution functions,

@@ -1,9 +1,14 @@
+import(
+  stats
+)
+
 useDynLib(RWiener, dwiener_c = dwiener, 
                    pwiener_c = pwiener, 
                    pwiener_full_c = pwiener_full, 
                    qwiener_c = qwiener, 
                    qwiener_full_c = qwiener_full, 
                    rwiener_c = rwiener)
+
 export (
 dwiener,
 pwiener,
@@ -31,7 +36,6 @@ wiener_plot
 )
 
 ## export s3 methods
-
 S3method(print, wdm)
 S3method(logLik, wdm)
 S3method(AIC, wdm)

@@ -51,7 +51,10 @@ as.wiener(data, yvar=c("q", "resp"))
   to transform \code{data.wiener} objects to \code{numdata.wiener} objects
   and vice versa. The generic function \code{reshape}(data, \ldots) can
   be called for convenience.
-  See \link[stats]{reshape} for default behavior of the reshape function.
+
+  See \code{\link[stats]{reshape}} documentation in
+  \code{\link[stats]{stats}} package for default behavior of the reshape
+  function.
   }
 \examples{
 ## generate data

@@ -48,7 +48,7 @@
 dat <- rwiener(100,3,.25,.5,0.8)
 
 ## fit wdm
-wdm1 <- wdm(dat)
+wdm1 <- wdm(dat, alpha=3, tau=.25, beta=0.5)
 
 ## compute likelihood, AIC, BIC, deviance
 logLik(wdm1)

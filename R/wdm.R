@@ -90,7 +90,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
       est <- tryCatch(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE),
         error=function() NULL)
       if (!is.null(est) & (est$code < 3)) {
-        est$convergence <- code=est$code
+        est$convergence <- est$code
         est$par <- est$estimate; est$estimate <- NULL
         est$value <- est$minimum; est$minimum <- NULL
         est$counts <- c(iterations=est$iterations); est$iterations <- NULL

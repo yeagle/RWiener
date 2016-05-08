@@ -42,10 +42,10 @@ BIC.wdm <- function(object, ...) {
     data <- object$data
     x <- object$par
     if(is.list(data)) {
-      loss(x,data)+length(x)*log(length(data[[1]][,1]))
+      object$loss(x,data)+length(x)*log(length(data[[1]][,1]))
     }
     else if (is.data.frame(data)) {
-      loss(x,data)+length(x)*log(length(data[,1]))
+      object$loss(x,data)+length(x)*log(length(data[,1]))
     }
     else {
       stop("don't know how to handle the data object")
