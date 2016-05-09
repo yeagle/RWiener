@@ -1,4 +1,4 @@
-AC_INIT([RWiener], [1.3-1])
+AC_INIT([RWiener], [1.3-0])
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
