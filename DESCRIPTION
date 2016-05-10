@@ -9,7 +9,7 @@ Author: Dominik Wabersich [aut, cre]
 Maintainer: Dominik Wabersich <dominik.wabersich@gmail.com>
 Depends: R (>= 3.2.2) 
 Suggests: MASS
-Imports: stats
+Imports: stats, graphics
 License: GPL (>= 2)
 URL: https://sourceforge.net/projects/rwiener/
 Description: Provides Wiener process distribution functions,

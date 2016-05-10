@@ -1,11 +1,15 @@
-import(
-  "stats"
+## imported packages
+importFrom("stats",
+  "logLik",
+  "AIC", "BIC", "deviance",
+  "density", "na.omit", "runif",
+  "nlm", "optim"
 )
-
 importFrom("graphics", 
   "mtext", "par", "plot", "rug"
 )
 
+## C functions
 useDynLib("RWiener", 
   "dwiener_c" = "dwiener", 
   "pwiener_c" = "pwiener", 
@@ -21,6 +25,7 @@ useDynLib("RWiener",
   "scldelta"
 )
 
+## exported functions
 export (
 "dwiener",
 "pwiener",
@@ -47,7 +52,7 @@ export (
 "wiener_plot"
 )
 
-## export s3 methods
+## exported s3 methods
 S3method("print", "wdm")
 S3method("logLik", "wdm")
 S3method("AIC", "wdm")
