@@ -19,12 +19,12 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
     if(length(xvar)==1) {
       if(class(data[,xvar]) == "factor"){
         res <- list()
-        res$par <- fpar
+        res$coefficients <- fpar
         for (l in levels(data[,xvar])) {
           est <- mle(data[data[,xvar]==l,yvar], fpar, start)
-          est$par <- est$par[!(names(est$par) %in% names(fpar))]
-          names(est$par) <- paste(l,names(est$par), sep=":")
-          res$par <- append(res$par, est$par)
+          est$coefficients <- est$coefficients[!(names(est$coefficients) %in% names(fpar))]
+          names(est$coefficients) <- paste(l,names(est$coefficients), sep=":")
+          res$coefficients <- append(res$coefficients, est$coefficients)
           res$counts <- append(res$counts, est$counts)
           res$convergence <- append(res$convergence, est$convergence)
           res$message <- append(res$message, est$message)
@@ -38,8 +38,8 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
     res <- mle(data[,yvar], fpar, start)
 
   # prepare return object
-  res$n <- length(data[,1])
-  res$npar <- length(res$par)
+  res$nobs <- length(data[,1])
+  res$npar <- length(res$coefficients)
   res$data <- data
   res$yvar <- yvar
   res$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
@@ -62,7 +62,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
 
   if (length(start)==0) {
     est <- list(
-      par = fpar,
+      coefficients = fpar,
       data = data,
       counts = NULL,
       convergence = NULL,
@@ -75,6 +75,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
     est <- optim(start,efn,data=data,fpar=fpar, method="Brent",
       lower=-100, upper=100, hessian=TRUE, control=list(maxit=2000))
     est$algorithm <- list(type="Brent (optim)")
+    est$coefficients <- est$par
   }
   else
   {
@@ -84,6 +85,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
       error=function() NULL)
     if (!is.null(est) & (est$convergence == 0)) {
       est$algorithm <- list(type="BFGS (optim)")
+      est$coefficients <- est$par
     }
     else {
       ## second: try 'Newton-type (nlm)'
@@ -91,7 +93,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
         error=function() NULL)
       if (!is.null(est) & (est$code < 3)) {
         est$convergence <- est$code
-        est$par <- est$estimate; est$estimate <- NULL
+        est$coefficients <- est$estimate; est$estimate <- NULL
         est$value <- est$minimum; est$minimum <- NULL
         est$counts <- c(iterations=est$iterations); est$iterations <- NULL
         est$algorithm <- list(type="Newton-type (nlm)",
@@ -101,19 +103,22 @@ mle <- function(data, fpar=NULL, start=NULL) {
         ## third: try 'Nelder-Mead (optim)'
         est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
         est$algorithm <- list(type="Nelder-Mead")
+        est$coefficients <- est$par
       }
     }
   }
 
-  par <- eparvec(est$par, fpar)
+  par <- eparvec(est$coefficients, fpar)
 
   res <- list(
-    par = par,
+    coefficients = par,
     loglik = -est$value,
     counts = est$counts,
     convergence = est$convergence,
     message = est$message,
     hessian = est$hessian,
+    vcov = if (!is.null(est$hessian) & is.matrix(est$hessian))
+      solve(est$hessian) else NULL,
     algorithm = est$algorithm
   )
 
@@ -172,7 +177,7 @@ efn <- function(x, data, fpar=NULL) {
       x <- x[-1]
     }
   }
-  object$par <- par
+  object$coefficients <- par
 
   res <- nlogLik.wdm(object)
   return(res)

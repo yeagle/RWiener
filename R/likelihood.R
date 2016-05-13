@@ -1,6 +1,6 @@
 logLik.wdm <- function(object, ...) {
   data <- object$data
-  x <- object$par
+  x <- object$coefficients
 
   if (length(x) == 4) { 
     if (!verifypars(x[1],x[2],x[3],x[4])) {
@@ -13,7 +13,7 @@ logLik.wdm <- function(object, ...) {
     }
     return(sum(ll))
   }
-  else return(object$logLik)
+  else return(object$loglik)
 }
 
 ## internal function

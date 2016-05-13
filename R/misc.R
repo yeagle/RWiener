@@ -76,7 +76,7 @@ print.wdm <- function(x, ...) {
   print(x$call)
   cat("\n")
   cat("Parameters:\n")
-  print(x$par)
+  print(x$coefficients)
   cat("\n")
   cat("Hessian:\n")
   print(x$hessian)

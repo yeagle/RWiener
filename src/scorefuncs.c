@@ -6,13 +6,13 @@ double fl01(double t, double beta, double lambda, double kappa) {
   double res = 0;
 
   if(lambda < 0) { // ST = small times
-    for (int k=-kappa; k<=kappa; k++) {
+    for (int k=-ceil((kappa-1)/2); k<=floor((kappa-1)/2); k++) {
       res += ( (beta + 2*k)*exp(-(1.0L/2.0L)*pow(beta + 2*k, 2)/t) );
     }
     res = (1.0L/2.0L)*sqrt(2)*res/(sqrt(M_PI)*sqrt(pow(t, 3)));
   }
   else { // LT = large times
-    for (int k=1; k<=kappa; k++) {
+    for (int k=1; k<=ceil(kappa); k++) {
       res +=  ( k*exp(-(1.0L/2.0L)*pow(M_PI, 2)*pow(k, 2)*t)*sin(M_PI*beta*k) );
     }
     res = M_PI*res;
@@ -26,7 +26,7 @@ double scl01tau(double t, double beta, double lambda, double kappa) {
   double res2 = 0;
 
   if (lambda < 0) { // ST = small times
-    for (int k=-kappa; k<=kappa; k++) {
+    for (int k=-ceil((kappa-1)/2); k<=floor((kappa-1)/2); k++) {
       res += ( -2*pow(beta + 2*k, 3)*exp(-pow(beta + 2*k, 2)
         / (2*t))/pow(2*t, 2) );
       res2 += ( (beta + 2*k)*exp(-pow(beta + 2*k, 2)/(2*t)) );
@@ -35,7 +35,7 @@ double scl01tau(double t, double beta, double lambda, double kappa) {
     res = res2 + (1.0L/2.0L)*sqrt(2)*res/(sqrt(M_PI)*sqrt(pow(t, 3)));
   }
   else { // LT = large times
-    for (int k=1; k<=kappa; k++) {
+    for (int k=1; k<=ceil(kappa); k++) {
       res += ( (1.0L/2.0L)*pow(M_PI, 2)*pow(k, 3)*exp(-(1.0L/2.0L)
         *pow(M_PI, 2)*pow(k, 2)*t)*sin(M_PI*beta*k) );
     }
@@ -49,7 +49,7 @@ double scl01beta(double t, double beta, double lambda, double kappa) {
   double res = 0;
 
   if(lambda < 0) { // ST = small times
-    for (int k=-kappa; k<=kappa; k++) {
+    for (int k=-ceil((kappa-1)/2); k<=floor((kappa-1)/2); k++) {
       res += ( exp(-(1.0L/2.0L)*pow(beta + 2*k, 2)/t) 
         - (1.0L/2.0L)*(beta + 2*k)*(2*beta + 4*k)
         *exp(-(1.0L/2.0L)*pow(beta + 2*k, 2)/t)/t );
@@ -57,7 +57,7 @@ double scl01beta(double t, double beta, double lambda, double kappa) {
     res = (1.0L/2.0L)*sqrt(2)*res/(sqrt(M_PI)*sqrt(pow(t, 3)));
   }
   else { // LT = large times
-    for (int k=1; k<=kappa; k++) {
+    for (int k=1; k<=ceil(kappa); k++) {
       res += ( M_PI*pow(k, 2)*exp(-(1.0L/2.0L)*pow(M_PI, 2)*pow(k, 2)*t)*cos(M_PI*beta*k) );
     }
     res = res*M_PI;
@@ -72,7 +72,7 @@ SEXP kappaLT(SEXP t) {
 
   PROTECT(value = allocVector(REALSXP, 1));
 
-  REAL(value)[0] = ceil( sqrt(2)*sqrt(-log(M_PI*err*REAL(t)[0])/REAL(t)[0])/M_PI );
+  REAL(value)[0] = ( sqrt(2)*sqrt(-log(M_PI*err*REAL(t)[0])/REAL(t)[0])/M_PI );
 
   UNPROTECT(1);
 
@@ -85,7 +85,7 @@ SEXP kappaST(SEXP t) {
 
   PROTECT(value = allocVector(REALSXP, 1));
 
-  REAL(value)[0] = ceil( sqrt(2)*sqrt(-REAL(t)[0]*log(2*sqrt(2)*sqrt(M_PI)*err*sqrt(REAL(t)[0]))) + 2 );
+  REAL(value)[0] = ( sqrt(2)*sqrt(-REAL(t)[0]*log(2*sqrt(2)*sqrt(M_PI)*err*sqrt(REAL(t)[0]))) + 2 );
 
   UNPROTECT(1);
 

@@ -6,10 +6,10 @@ estfun <- function(x, ...) {
 estfun.wdm <- function(x, ...) {
   y <- x$data[,x$yvar]
 
-  alpha <- x$par["alpha"]
-  tau <- x$par["tau"]
-  beta <- x$par["beta"]
-  delta <- x$par["delta"]
+  alpha <- x$coefficients["alpha"]
+  tau <- x$coefficients["tau"]
+  beta <- x$coefficients["beta"]
+  delta <- x$coefficients["delta"]
 
   n <- length(y[,1])
   res <- matrix(rep(NA,4*n), n,4)
@@ -35,6 +35,12 @@ estfun.wdm <- function(x, ...) {
       res[i,3] <- .Call(sclbeta, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
       res[i,4] <- .Call(scldelta, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
     }
+  }
+
+  ## aggregate scores by id
+  if("id" %in% names(x$data)) {
+    res <- cbind(res, id=x$data$id)
+    res <- aggregate(. ~ id, sum, data=as.data.frame(res))[,-1]
   }
 
   return(res)
