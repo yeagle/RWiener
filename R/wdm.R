@@ -92,8 +92,8 @@ mle <- function(data, fpar=NULL, start=NULL) {
     }
     if (is.null(est)) {
       ## second: try 'Newton-type (nlm)'
-      ## note: suppressWarning used for nlm, as nlm inflates warning messages
-      est <- tryCatch(suppressWarning(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE)),
+      ## note: suppressWarnings used for nlm, as nlm inflates warning messages
+      est <- tryCatch(suppressWarnings(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE)),
         error=function(e) NULL)
       if (!is.null(est)) {
         if  (est$code < 3) {

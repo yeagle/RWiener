@@ -29,7 +29,7 @@ AIC.wdm <- function(object, ...) {
   }
   else {
     data <- object$data
-    x <- object$par
+    x <- object$coefficients
     object$loss(x,data)+length(x)*2 
   }
 }
@@ -40,7 +40,7 @@ BIC.wdm <- function(object, ...) {
   }
   else {
     data <- object$data
-    x <- object$par
+    x <- object$coefficients
     if(is.list(data)) {
       object$loss(x,data)+length(x)*log(length(data[[1]][,1]))
     }

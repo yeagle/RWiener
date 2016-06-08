@@ -44,7 +44,7 @@
   called, but a \code{wdm} object will still be created.
 
   The returned \code{wdm} object is basically a list containing the
-  parameter estimates in \code{$par}. \code{$hessian} contains the
+  parameter estimates in \code{$coefficients}. \code{$hessian} contains the
   numerically differentiated Hessian matrix (if available, else NULL).
   \code{$data} contains the data passed to the \code{wdm} function call.
   \code{$loglik} contains the log-likelihood value for the \code{wdm}
@@ -73,15 +73,16 @@ sqrt(diag(MASS::ginv(wdm1$hessian)))
 
 ## fit wdm
 wdm2 <- wdm(dat, beta=.5)
-wdm3 <- wdm(dat, alpha=wdm1$par[1], tau=wdm1$par[2], beta=wdm1$par[3],
+wdm3 <- wdm(dat, alpha=wdm1$coefficients[1], tau=wdm1$coefficients[2],
+beta=wdm1$coefficients[3],
   xvar="group")
 
 \dontshow{
-if (!(round(sum(wdm1$par),6) == 1.548682)) 
+if (!(round(sum(wdm1$coefficients),6) == 1.548682)) 
   stop("Example calculations changed despite fixed seed")
-if (!(round(sum(wdm2$par),6) == 1.58825)) 
+if (!(round(sum(wdm2$coefficients),6) == 1.58825)) 
   stop("Example calculations changed despite fixed seed")
-if (!(round(sum(wdm3$par),6) == 1.395183)) 
+if (!(round(sum(wdm3$coefficients),6) == 1.395183)) 
   stop("Example calculations changed despite fixed seed")
 }
 }
