@@ -93,7 +93,6 @@ SEXP kappaST(SEXP t) {
 }
 
 SEXP sclalpha(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
-  double err = 1e-10;
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -115,7 +114,6 @@ SEXP sclalpha(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, 
 }
 
 SEXP scltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
-  double err = 1e-10;
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -136,7 +134,6 @@ SEXP scltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SE
 }
 
 SEXP sclbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
-  double err = 1e-10;
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -157,7 +154,6 @@ SEXP sclbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, S
 }
 
 SEXP scldelta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
-  double err = 1e-10;
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 

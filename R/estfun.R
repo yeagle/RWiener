@@ -37,11 +37,5 @@ estfun.wdm <- function(x, ...) {
     }
   }
 
-  ## aggregate scores by id
-  if("id" %in% names(x$data)) {
-    res <- cbind(res, id=x$data$id)
-    res <- aggregate(. ~ id, sum, data=as.data.frame(res))[,-1]
-  }
-
   return(res)
 }

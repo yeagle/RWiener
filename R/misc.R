@@ -13,7 +13,8 @@ is.wiener <- function(data) {
 }
 
 as.wiener <- function(data, yvar=c("q", "resp")) {
-  if(is.data.frame(data) & (sum(as.numeric(colnames(data) == yvar))==2) )
+  if(is.data.frame(data) & ((as.numeric(yvar[1] %in%
+     colnames(data))+as.numeric(yvar[2] %in% colnames(data)))==2) )
   {
     class(data) <- c("data.wiener", "data.frame")
   }

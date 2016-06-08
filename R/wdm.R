@@ -82,24 +82,31 @@ mle <- function(data, fpar=NULL, start=NULL) {
     ## first: try 'BFGS (optim)'
     est <- tryCatch(optim(start,efn,data=data,fpar=fpar,
       method="BFGS",hessian=TRUE, control=list(maxit=2000)), 
-      error=function() NULL)
-    if (!is.null(est) & (est$convergence == 0)) {
-      est$algorithm <- list(type="BFGS (optim)")
-      est$coefficients <- est$par
-    }
-    else {
-      ## second: try 'Newton-type (nlm)'
-      est <- tryCatch(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE),
-        error=function() NULL)
-      if (!is.null(est) & (est$code < 3)) {
-        est$convergence <- est$code
-        est$coefficients <- est$estimate; est$estimate <- NULL
-        est$value <- est$minimum; est$minimum <- NULL
-        est$counts <- c(iterations=est$iterations); est$iterations <- NULL
-        est$algorithm <- list(type="Newton-type (nlm)",
-          gradient=est$gradient); est$gradient <- NULL
+      error=function(e) NULL)
+    if (!is.null(est)) {
+      if (est$convergence == 0) {
+        est$algorithm <- list(type="BFGS (optim)")
+        est$coefficients <- est$par
       }
-      else {
+      else est <- NULL
+    }
+    if (is.null(est)) {
+      ## second: try 'Newton-type (nlm)'
+      ## note: suppressWarning used for nlm, as nlm inflates warning messages
+      est <- tryCatch(suppressWarning(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE)),
+        error=function(e) NULL)
+      if (!is.null(est)) {
+        if  (est$code < 3) {
+          est$convergence <- est$code
+          est$coefficients <- est$estimate; est$estimate <- NULL
+          est$value <- est$minimum; est$minimum <- NULL
+          est$counts <- c(iterations=est$iterations); est$iterations <- NULL
+          est$algorithm <- list(type="Newton-type (nlm)",
+            gradient=est$gradient); est$gradient <- NULL
+        }
+        else est <- NULL
+      }
+    if (is.null(est)) {
         ## third: try 'Nelder-Mead (optim)'
         est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
         est$algorithm <- list(type="Nelder-Mead")
