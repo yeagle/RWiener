@@ -1,9 +1,9 @@
 ## empirical estimation function (score function) 
-estfun <- function(x, ...) {
-  UseMethod("estfun")
+scorefun <- function(x, ...) {
+  UseMethod("scorefun")
 }
 
-estfun.wdm <- function(x, ...) {
+scorefun.wdm <- function(x, ...) {
   y <- x$data[,x$yvar]
 
   alpha <- x$coefficients["alpha"]

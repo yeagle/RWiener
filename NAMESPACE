@@ -3,7 +3,8 @@ importFrom("stats",
   "logLik",
   "AIC", "BIC", "deviance",
   "density", "na.omit", "runif",
-  "nlm", "optim"
+  "nlm", "optim",
+  "pchisq"
 )
 importFrom("graphics", 
   "mtext", "par", "plot", "rug"
@@ -37,19 +38,19 @@ export (
 "BIC.wdm",
 "deviance.wdm",
 "wdm",
-"estfun",
-"estfun.wdm",
+"scorefun",
+"scorefun.wdm",
 "is.wiener",
 "as.wiener",
-"reshape",
-"reshape.default",
-"reshape.data.wiener",
-"reshape.numdata.wiener",
+"revamp",
+"revamp.data.wiener",
+"revamp.numdata.wiener",
 "wiener_likelihood",
 "wiener_deviance",
 "wiener_aic",
 "wiener_bic",
-"wiener_plot"
+"wiener_plot",
+"wlrt"
 )
 
 ## exported s3 methods
@@ -58,8 +59,7 @@ S3method("logLik", "wdm")
 S3method("AIC", "wdm")
 S3method("BIC", "wdm")
 S3method("deviance", "wdm")
-S3method("estfun", "wdm")
+S3method("scorefun", "wdm")
 S3method("plot", "data.wiener")
-S3method("reshape", "default")
-S3method("reshape", "data.wiener")
-S3method("reshape", "numdata.wiener")
+S3method("revamp", "data.wiener")
+S3method("revamp", "numdata.wiener")

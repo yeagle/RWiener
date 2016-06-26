@@ -3,10 +3,9 @@
 \alias{as.wiener}
 \alias{numdata.wiener}
 \alias{data.wiener}
-\alias{reshape}
-\alias{reshape.default}
-\alias{reshape.data.wiener}
-\alias{reshape.numdata.wiener}
+\alias{revamp}
+\alias{revamp.data.wiener}
+\alias{revamp.numdata.wiener}
 \title{Miscellaneous Wiener Diffusion model functions}
 \description{
   \code{is.wiener} bla.
@@ -14,8 +13,8 @@
 \usage{
 is.wiener(data)
 as.wiener(data, yvar=c("q", "resp"))
-\method{reshape}{numdata.wiener}(data, \ldots)
-\method{reshape}{data.wiener}(data, \ldots)
+\method{revamp}{numdata.wiener}(data, \ldots)
+\method{revamp}{data.wiener}(data, \ldots)
 }
 \arguments{
   \item{data}{can be a data.wiener and/or data.frame with data (needs a reaction time column and a
@@ -49,14 +48,10 @@ as.wiener(data, yvar=c("q", "resp"))
   \code{is.wiener} checks if the given data is a wiener data object
   (\code{data.wiener} or \code{numdata.wiener}).
 
-  \code{reshape.data.wiener} and \code{reshape.numdat.wiener} can be used
+  \code{revamp.data.wiener} and \code{revamp.numdat.wiener} can be used
   to transform \code{data.wiener} objects to \code{numdata.wiener} objects
-  and vice versa. The generic function \code{reshape}(data, \ldots) can
+  and vice versa. The generic function \code{revamp}(data, \ldots) can
   be called for convenience.
-
-  See \code{\link[stats]{reshape}} documentation in
-  \code{\link[stats]{stats}} package for default behavior of the reshape
-  function.
   }
 \examples{
 ## generate data
@@ -66,11 +61,11 @@ dat <- rwiener(100, 4,.35,.5,0.8)
 is.wiener(dat)
 dat <- as.data.frame(dat)
 dat <- as.wiener(dat)
-y <- reshape(dat)
+y <- revamp(dat)
 y
-reshape(y)
+revamp(y)
 }
 \keyword{is.wiener}
 \keyword{as.wiener}
-\keyword{reshape.numdata.wiener}
-\keyword{reshape.data.wiener}
+\keyword{revamp.numdata.wiener}
+\keyword{revamp.data.wiener}

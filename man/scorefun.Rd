@@ -1,13 +1,13 @@
-\name{estfun}
-\alias{estfun}
-\alias{estfun.wdm}
+\name{scorefun}
+\alias{scorefun}
+\alias{scorefun.wdm}
 \title{Extract Empirical Estimating Functions}
 \description{
  Generic function for extracting the empirical estimating functions
  of a fitted model.
 }
 \usage{
-estfun(x, \dots)
+scorefun(x, \dots)
 }
 \arguments{
  \item{x}{a fitted model object.}
@@ -39,5 +39,5 @@ dat <- rwiener(100,1,.2,.5,0.5)
 wdm1 <- wdm(dat)
 
 ## estimating function
-estfun(wdm1)
+scorefun(wdm1)
 }

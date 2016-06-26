@@ -1,14 +1,14 @@
 ## maximum likelihood estimation of wdm model parameters
 wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
-               xvar=NULL, xvar.par=NULL, start=NULL) {
+               xvar=NULL, start=NULL) {
   # save original function call
   cl <- match.call()
 
   # prepare passed arguments
   verifydata(data)
-  if (is.numeric(data) & is.null(xvar)) data <- reshapewiener(data, yvar=yvar)
+  if (is.numeric(data) & is.null(xvar)) data <- revampwiener(data, yvar=yvar)
   else if (length(yvar)==1) {
-    cbind(reshapewiener(data[,yvar]), data)
+    cbind(revampwiener(data[,yvar]), data)
     yvar <- c("q", "resp")
   }
   fpar <- c("alpha"=unname(alpha), "tau"=unname(tau), 

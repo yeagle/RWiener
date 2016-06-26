@@ -26,17 +26,8 @@ as.wiener <- function(data, yvar=c("q", "resp")) {
   return(data)
 }
 
-## redefine reshape function to be generic
-reshape <- function(data, ...) UseMethod("reshape")
-
-## save default reshape method from stats package
-reshape.default <- function(data, ...) {
-  stats::reshape(data, ...)
-}
-
-## wiener reshape methods
 ## internal function
-reshapewiener <- function(data, yvar=c("q", "resp"), direction="auto") {
+revampwiener <- function(data, yvar=c("q", "resp"), direction="auto") {
   verifydata(data)
 
   if(is.data.frame(data) & (direction %in% c("wide", "auto")))
@@ -65,11 +56,14 @@ reshapewiener <- function(data, yvar=c("q", "resp"), direction="auto") {
   return(res)
 }
 
-reshape.numdata.wiener <- function(data, ...) {
-  reshapewiener(data, ...)
+## define revamp (wiener reshape) function to be generic
+revamp <- function(data, ...) UseMethod("revamp")
+
+revamp.numdata.wiener <- function(data, ...) {
+  revampwiener(data, ...)
 }
-reshape.data.wiener <- function(data, ...) {
-  reshapewiener(data, ...)
+revamp.data.wiener <- function(data, ...) {
+  revampwiener(data, ...)
 }
 
 print.wdm <- function(x, ...) {

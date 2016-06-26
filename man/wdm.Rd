@@ -8,7 +8,7 @@
 }
 \usage{
   wdm(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL,
-    delta=NULL, xvar=NULL, xvar.par=NULL, start=NULL)
+    delta=NULL, xvar=NULL, start=NULL)
 }
 \arguments{
   \item{data}{is the data object containing data coming from a
@@ -25,8 +25,8 @@
   value.}
   \item{delta}{optional, can be used to fix the delta parameter to the
   given value.}
-  \item{xvar}{NULL (not yet fully implemented)}
-  \item{xvar.par}{NULL (not yet implemented)}
+  \item{xvar}{optional: group factor variable to estimate all unfixed
+  parameters separate for the given groups.}
   \item{start}{an optional vector with the four starting parameter values
   in the following order: alpha, tau, beta, delta.}  
 }
