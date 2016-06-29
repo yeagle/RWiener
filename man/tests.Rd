@@ -5,11 +5,11 @@
   \code{wlrt} Likelihood Ratio Test.
 }
 \usage{
-  wlrt(wdm1, wdm2)
+  wlrt(wdmspecific, wdmgeneral)
 }
 \arguments{
-  \item{wdm1}{object 1}
-  \item{wdm2}{object 2}
+  \item{wdmspecific}{object 1}
+  \item{wdmgeneral}{object 2}
 }
 \details{
   The \code{wlrt} function calls ... }

@@ -1,18 +1,7 @@
-#!/usr/bin/R --silent -f
-# -*- encoding: utf-8 -*-
-# tests.R
-#
-# (c) 2016 Dominik Wabersich <dominik.wabersich [aet] gmail.com>
-# GPL 3.0+ or (cc) by-sa (http://creativecommons.org/licenses/by-sa/3.0/)
-#
-# created 2016-06-26
-# last mod 2016-06-26 15:48 DW
-#
+wlrt <- function(wdmspecific, wdmgeneral) {
 
-wlrt <- function(wdm1, wdm2) {
-
-  G2 <- 2*logLik(wdm2)-logLik(wdm1)
-  Df <- wdm2$npar - wdm1$npar
+  G2 <- 2 * ( logLik(wdmgeneral)-logLik(wdmspecific) )
+  Df <- wdmgeneral$npar - wdmspecific$npar
   pvalue <- pchisq(G2, Df, lower.tail=FALSE)
 
   res <- list(
@@ -24,12 +13,26 @@ wlrt <- function(wdm1, wdm2) {
   return(res)
 }
 
-wscoret <- function(wdm1, wdm2) {
-  res <- NULL
+wscoret <- function(wdmh0) {
+  sc <- scorefun(wdmh0)
+  info <- infofun(wdmh0)
+  n <- wdmh0$nobs
+
+  W <- 1/n * sum( sc^2/info ) 
+
+  Df <- 1
+  pvalue <- pchisq(W, Df, lower.tail=FALSE)
+
+  res <- list(
+  W = W, 
+  Df = Df,
+  pvalue = pvalue
+  )
+
   return(res)
 }
 
-wwaldt <- function(wdm1, wdm2) {
+wwaldt <- function(wdmh0, wdmh1) {
   res <- NULL
   return(res)
 }

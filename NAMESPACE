@@ -23,7 +23,11 @@ useDynLib("RWiener",
   "sclalpha",
   "scltau",
   "sclbeta",
-  "scldelta"
+  "scldelta",
+  "inlalpha",
+  "inltau",
+  "inlbeta",
+  "inldelta"
 )
 
 ## exported functions
@@ -40,6 +44,8 @@ export (
 "wdm",
 "scorefun",
 "scorefun.wdm",
+"infofun",
+"infofun.wdm",
 "is.wiener",
 "as.wiener",
 "revamp",
@@ -60,6 +66,7 @@ S3method("AIC", "wdm")
 S3method("BIC", "wdm")
 S3method("deviance", "wdm")
 S3method("scorefun", "wdm")
+S3method("infofun", "wdm")
 S3method("plot", "data.wiener")
 S3method("revamp", "data.wiener")
 S3method("revamp", "numdata.wiener")
