@@ -5,6 +5,7 @@
 \alias{efn}
 \alias{cparvec}
 \alias{mle}
+\alias{wlrt}
 \title{Wiener functions internals}
 \description{
   These functions are not to be used by the user.

@@ -8,7 +8,7 @@
 \alias{revamp.numdata.wiener}
 \title{Miscellaneous Wiener Diffusion model functions}
 \description{
-  \code{is.wiener} bla.
+  Miscellaneous functions for the RWiener package.
 }
 \usage{
 is.wiener(data)

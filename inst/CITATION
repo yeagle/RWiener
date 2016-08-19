@@ -1,0 +1,19 @@
+note <- sprintf("R package version %s", meta$Version)
+title <- sprintf("%s", meta$Title)
+author <- sprintf("%s", meta$Author)
+url <- sprintf("%s", meta$URL)
+
+bibentry(bibtype = "article",
+         title="The RWiener package: An R package providing distribution functions for the Wiener diffusion model",
+         author = c(person("Dominik", "Wabersich"),
+                    person("Joachim", "Vandekerckhove")),
+         year = "2014", 
+         journal="The R Journal",
+         volume="6",
+         number="1",
+         pages="49--56",
+         note=note,
+         
+         header="If you use the core functions: dwiener(), pwiener(),
+         qwiener() and rwiener(), please cite:"
+         )

@@ -12,7 +12,7 @@ Using the package
   pwiener(q, alpha,tau,beta,delta, resp="upper")
   qwiener(p, alpha,tau,beta,delta, resp="upper")
   rwiener(n, alpha,tau,beta,delta)
- 
+
 *arguments*:
 
 - q being a quantile
@@ -24,17 +24,27 @@ Using the package
 - beta being the bias
 - delta being the drift rate
 
-Further, the package includes functions to compute the likelihood, which
-can be used in combination with R's optim() function, to get parameter
-estimates for the model.
+Apart from these basic functions, the package provides more functions for
+futher analyses, e.g. functions to compute the likelihood. 
+These functions are used in predefined estimation routines - the wdm()
+function - to automatically create wdm model objects with estimated
+parameter values. One can also use the functions in combination with R's
+optim() function, to manually get parameter estimates for the model.
+
+::
+
+  wdm(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL,
+    delta=NULL, xvar=NULL, start=NULL)
 
 See the R man pages for more details!
 
 Please note
 -----------
-When using this package, please cite as:
-Wabersich, D. and Vandekerckhove, J. (in preparation). Wiener diffusion
-  process distribution functions in R: The RWiener package.
+For an introduction and when citing this package:
+
+Wabersich, D., & Vandekerckhove, J. (2014). The RWiener Package: an R
+  Package providing distribution functions for the wiener diffusion model.
+  The R Journal, 6(1), 49-56.
 
 License
 -------

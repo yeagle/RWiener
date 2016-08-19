@@ -11,7 +11,7 @@ Depends: R (>= 3.0.0)
 Suggests: MASS
 Imports: stats, graphics
 License: GPL (>= 2)
-URL: https://sourceforge.net/projects/rwiener/
+URL: https://github.com/yeagle/RWiener
 Description: Provides Wiener process distribution functions,
   namely the Wiener first passage time density, CDF, quantile and random
   functions.
