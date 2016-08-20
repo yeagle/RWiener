@@ -76,15 +76,15 @@ print.wlrt <- function(x, ...) {
 wscoret <- function(wdmh0) {
   sc <- scorefun(wdmh0)
   info <- infofun(wdmh0)
-  n <- wdmh0$nobs
+  n <- nobs(wdmh0)
 
-  W <- 1/n * sum( sc^2/info ) 
+  LM <- 1/n * sum( sc^2/info ) 
 
   Df <- 1
-  pvalue <- pchisq(W, Df, lower.tail=FALSE)
+  pvalue <- pchisq(LM, Df, lower.tail=FALSE)
 
   res <- list(
-  W = W, 
+  LM = LM, 
   Df = Df,
   pvalue = pvalue
   )
@@ -92,7 +92,29 @@ wscoret <- function(wdmh0) {
   return(res)
 }
 
-wwaldt <- function(wdmh0, wdmh1) {
-  res <- NULL
+wwaldt <- function(wdmh1, par1="delta", testval=0, par2=NULL) {
+  pars <- coef(wdmh1)
+  vars <- diag(wdmh1$vcov) 
+  names(vars) <- names(pars)
+  n <- nobs(wdmh1)
+
+  if(!is.null(par2)) {
+    testval <- pars[par2]
+  }
+
+  # method 1: chi-squared distribution with df=1
+  W2 <- 1/n * ((pars[par1]-testval)^2 / vars[par1])
+  chisq <- pchisq(W2, 1, lower.tail=FALSE)
+  # method 2: normal distribution
+  W <- sqrt( W2 )
+  ND <- pnorm(W, pars[par1], sqrt(vars[par1]), lower.tail=TRUE)
+
+  res <- list(
+  W2 = W2,
+  W2.pvalue = chisq,
+  W = W,
+  W.pvalue = ND
+  )
+
   return(res)
 }

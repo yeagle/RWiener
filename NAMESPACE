@@ -5,7 +5,8 @@ importFrom("stats",
   "density", "na.omit", "runif",
   "nlm", "optim",
   "pchisq",
-  "coef"
+  "coef", "nobs", 
+  "pnorm"
 )
 importFrom("graphics", 
   "mtext", "par", "plot", "rug"
