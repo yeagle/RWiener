@@ -43,7 +43,6 @@
   }
 
 \examples{
-\dontshow{set.seed(1)}%
 ### Example 1: Parameter estimation
 ## generate random data
 dat <- rwiener(100,2,.3,.5,0)
@@ -113,7 +112,6 @@ dat1 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=0.5)
 dat2 <- rwiener(n=100, alpha=2, tau=.3, beta=.5, delta=1)
 datlist <- list(dat1,dat2)
 wiener_aic(x=c(2,.3,.5,.5,1), data=datlist, loss=many_drifts)
-
 }
 \keyword{wiener_likelihood}
 \keyword{wiener_deviance}

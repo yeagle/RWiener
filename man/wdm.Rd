@@ -57,33 +57,19 @@
 %\note{}
 %\author{}
 \examples{
-\dontshow{set.seed(1)}%
 ## generate random data
-d1 <- rwiener(100, 1,.3,.5,1)
-d2 <- rwiener(100, 1,.3,.5,-1)
-d1$group <- factor('g1', levels=c('g1', 'g2'))
-d2$group <- factor('g2', levels=c('g1', 'g2'))
-dat <- rbind(d1,d2)
+dat <- rbind(cbind(rwiener(100, 2,.3,.5,1), group="A"),
+        cbind(rwiener(100,2,.3,.5,-1), group="B"))
 
 ## fit wdm
 wdm1 <- wdm(dat)
 
-## extract sd
-sqrt(diag(MASS::ginv(wdm1$hessian)))
+## extract parameters
+coef(wdm1)
 
-## fit wdm
+## further models
 wdm2 <- wdm(dat, beta=.5)
 wdm3 <- wdm(dat, alpha=wdm1$coefficients[1], tau=wdm1$coefficients[2],
-beta=wdm1$coefficients[3],
-  xvar="group")
-
-\dontshow{
-if (!(round(sum(wdm1$coefficients),6) == 1.548682)) 
-  stop("Example calculations changed despite fixed seed")
-if (!(round(sum(wdm2$coefficients),6) == 1.58825)) 
-  stop("Example calculations changed despite fixed seed")
-if (!(round(sum(wdm3$coefficients),6) == 1.395183)) 
-  stop("Example calculations changed despite fixed seed")
-}
+            beta=wdm1$coefficients[3], xvar="group")
 }
 \keyword{wdm}

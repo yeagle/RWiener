@@ -124,8 +124,6 @@ mle <- function(data, fpar=NULL, start=NULL) {
     convergence = est$convergence,
     message = est$message,
     hessian = est$hessian,
-    vcov = if (!is.null(est$hessian) & is.matrix(est$hessian))
-      solve(est$hessian) else NULL,
     algorithm = est$algorithm
   )
 
@@ -209,5 +207,13 @@ eparvec <- function(x, fpar=NULL) {
   res[!is.na(res)] <- x
   res[is.na(res)] <- fpar
 
+  return(res)
+}
+
+## additional functions
+
+vcov.wdm <- function(object, ...) {
+  # opg-estimator (outer product of gradients)
+  res <- crossprod(scorefun(object))/nobs(object) 
   return(res)
 }

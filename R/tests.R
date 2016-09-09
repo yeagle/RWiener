@@ -73,47 +73,108 @@ print.wlrt <- function(x, ...) {
   print(x$table)
 }
 
-wscoret <- function(wdmh0) {
-  sc <- scorefun(wdmh0)
-  info <- infofun(wdmh0)
-  n <- nobs(wdmh0)
+## define waldtest function to be generic
+waldtest <- function(object, ...) UseMethod("waldtest")
 
-  LM <- 1/n * sum( sc^2/info ) 
+## waldtest.wdm function
+waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
+  return(wwaldt(object, theta, theta0))
+}
 
-  Df <- 1
-  pvalue <- pchisq(LM, Df, lower.tail=FALSE)
+## internal function
+## H1: wdm
+wwaldt <- function(object, theta="delta", theta0=0) {
+  pars <- coef(object)
+  vars <- diag(vcov(object)) 
+  names(vars) <- names(pars)
+  n <- nobs(object)
+
+  # method 1: chi-squared distribution with df=1
+  W2 <- 1/n * ((pars[theta]-theta0)^2 / vars[theta])
+  chisq <- pchisq(W2, 1, lower.tail=FALSE)
+  # method 2: normal distribution
+  W <- 1/sqrt(n) * (pars[theta]-theta0)/(sqrt(vars[theta]))
+  ND <- pnorm(W, pars[theta], sqrt(vars[theta]), lower.tail=TRUE)
 
   res <- list(
-  LM = LM, 
-  Df = Df,
+  W2 = W2,
+  W2.pvalue = chisq,
+  W = W,
+  W.pvalue = ND,
+  test = list(theta=theta,theta0=theta0)
+  )
+
+  class(res) <- c(class(res), "wwaldt")
+  return(res)
+}
+
+print.wwaldt <- function(x, ...) {
+  wtab <- rbind(c(x$W2, x$W2.pvalue), 
+                c(x$W, x$W.pvalue) )
+  colnames(wtab) <- c("Test-Statistic", "pvalue")
+  rownames(wtab) <- c("W2","W") 
+
+  cat("\n")
+  cat("Wiener Wald Test")
+  cat("\n\n")
+  cat("Null hypothesis: ", x$test$theta, "=", x$test$theta0 , sep="")
+  cat("\n")
+  cat("W2 ~ Chisq, Df=1; p-value: upper tail (one-tailed)\n")
+  cat("W ~ Normal Distribution; p-value: lower tail (two-tailed)\n")
+  cat("\n")
+  print(wtab)
+}
+
+## H0: wdm
+wscoret <- function(object) {
+  sc <- scorefun(object)
+  info <- infofun(object)
+  n <- nobs(object)
+
+  LM2 <- 1/n * sum( sc^2/info ) 
+  #LM <- 1/sqrt(n) * sum( sc / sqrt(info))
+
+  Df <- 1
+  pvalue <- pchisq(LM2, Df, lower.tail=FALSE)
+
+  res <- list(
+  LM = LM2, 
   pvalue = pvalue
   )
 
   return(res)
 }
 
-wwaldt <- function(wdmh1, par1="delta", testval=0, par2=NULL) {
-  pars <- coef(wdmh1)
-  vars <- diag(wdmh1$vcov) 
-  names(vars) <- names(pars)
-  n <- nobs(wdmh1)
+## internal function
+rootMatrix <- function(A) eigen(A)$vectors %*%
+                           sqrt(diag(eigen(A)$values)) %*%
+                           t(eigen(A)$vectors)
 
-  if(!is.null(par2)) {
-    testval <- pars[par2]
-  }
+## internal function
+cumScoreProc <- function(object) {
+  s <- scorefun(object)
+  n <- nobs(object)
+  I <- crossprod(s)/n # or: cov(s), or: info
+  res <- t(solve(rootMatrix(I)) %*% t(apply(s, 2, cumsum))) / sqrt(n)
 
-  # method 1: chi-squared distribution with df=1
-  W2 <- 1/n * ((pars[par1]-testval)^2 / vars[par1])
-  chisq <- pchisq(W2, 1, lower.tail=FALSE)
-  # method 2: normal distribution
-  W <- sqrt( W2 )
-  ND <- pnorm(W, pars[par1], sqrt(vars[par1]), lower.tail=TRUE)
+  return(res)
+}
+
+## H0: wdm
+wfluct <- function(object) {
+  n <- nobs(object)
+  npar <- object$npar
+  B <- cumScoreProc(object)
+
+  DM <- max(apply(abs(B), 1, max))                                 # DM
+  CvM <- sum(B^2)/n                                               # CvM
+  maxLM <- max(rowSums(B^2)[(npar+1):(n-npar)]/
+               (((npar+1):(n-npar)/n)*((npar+1):(n-npar)/n)))     # maxLM
 
   res <- list(
-  W2 = W2,
-  W2.pvalue = chisq,
-  W = W,
-  W.pvalue = ND
+  DM = DM,
+  CvM = CvM,
+  maxLM = maxLM
   )
 
   return(res)

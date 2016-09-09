@@ -1,6 +1,9 @@
 \name{wiener diffusion model tests}
 \alias{anova.wdm}
 \alias{print.wlrt}
+\alias{waldtest}
+\alias{waldtest.wdm}
+\alias{print.wwaldt}
 \title{Wiener Diffusion model test functions}
 \description{
   Calculates test scores and further information for \code{\link{wdm}}

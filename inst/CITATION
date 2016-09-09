@@ -4,7 +4,7 @@ author <- sprintf("%s", meta$Author)
 url <- sprintf("%s", meta$URL)
 
 bibentry(bibtype = "article",
-         title="The RWiener package: An R package providing distribution functions for the Wiener diffusion model",
+         title="The {RW}iener package: An {R} package providing distribution functions for the Wiener diffusion model",
          author = c(person("Dominik", "Wabersich"),
                     person("Joachim", "Vandekerckhove")),
          year = "2014", 

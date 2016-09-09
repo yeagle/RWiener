@@ -20,10 +20,10 @@
 %\note{}
 %\author{}
 \examples{
-# generate random data
+## generate random data
 dat <- rwiener(100,2,.3,.5,0)
 
-# plot
+## plot
 plot(dat)
 }
 \keyword{plot.data.wiener}

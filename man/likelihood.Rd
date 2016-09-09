@@ -42,8 +42,6 @@
 }
 
 \examples{
-\dontshow{set.seed(1)}%
-### Example 1: Parameter estimation
 ## generate random data
 dat <- rwiener(100,3,.25,.5,0.8)
 

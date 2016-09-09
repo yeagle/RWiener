@@ -59,7 +59,11 @@ export (
 "wiener_bic",
 "wiener_plot",
 "anova.wdm",
-"print.wlrt"
+"print.wlrt",
+"vcov.wdm",
+"waldtest",
+"waldtest.wdm",
+"print.wwaldt"
 )
 
 ## exported s3 methods
@@ -70,8 +74,11 @@ S3method("BIC", "wdm")
 S3method("deviance", "wdm")
 S3method("scorefun", "wdm")
 S3method("infofun", "wdm")
+S3method("anova", "wdm")
+S3method("vcov", "wdm")
 S3method("plot", "data.wiener")
 S3method("revamp", "data.wiener")
 S3method("revamp", "numdata.wiener")
-S3method("anova", "wdm")
 S3method("print", "wlrt")
+S3method("waldtest", "wdm")
+S3method("print", "wwaldt")
