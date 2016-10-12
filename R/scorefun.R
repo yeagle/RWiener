@@ -1,3 +1,20 @@
+## estfun generic function
+estfun <- function(x, ...) {
+  UseMethod("estfun")
+}
+
+## define estfun for the wdm model object (needed by sctest function)
+## same as scorefun, but aggregates by id (persons)
+## empirical estimation function (score function) 
+estfun.wdm <- function(x, ...) {
+  res <- scorefun.wdm(x)
+  if("id" %in% names(x$data)) {
+    res <- cbind(res, id=x$data$id)
+    res <- aggregate(. ~ id, sum, data=as.data.frame(res))[,-1]
+  }
+  return(res)
+}
+
 ## empirical estimation function (score function) 
 scorefun <- function(x, ...) {
   UseMethod("scorefun")

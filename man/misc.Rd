@@ -1,4 +1,4 @@
-\name{miscellaneous wiener model functions}
+\name{miscellaneous}
 \alias{is.wiener}
 \alias{as.wiener}
 \alias{numdata.wiener}

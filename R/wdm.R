@@ -1,6 +1,6 @@
 ## maximum likelihood estimation of wdm model parameters
 wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delta=NULL,
-               xvar=NULL, start=NULL) {
+               xvar=NULL, start=NULL, fixed=0) {
   # save original function call
   cl <- match.call()
 
@@ -39,7 +39,7 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
 
   # prepare return object
   res$nobs <- length(data[,1])
-  res$npar <- length(res$coefficients)
+  res$npar <- length(res$coefficients)-fixed
   res$data <- data
   res$yvar <- yvar
   res$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
@@ -212,8 +212,14 @@ eparvec <- function(x, fpar=NULL) {
 
 ## additional functions
 
-vcov.wdm <- function(object, ...) {
+vcov.wdm <- function(object, ..., method="opg") {
   # opg-estimator (outer product of gradients)
-  res <- crossprod(scorefun(object))/nobs(object) 
+  if (method=="opg")
+    res <- solve(crossprod(scorefun(object)))
+  else if (method=="hessian")
+    res <- solve(object$hessian)
+  else 
+    stop("Wrong method specified")
+
   return(res)
 }

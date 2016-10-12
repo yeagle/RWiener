@@ -1,4 +1,4 @@
-\name{wdm likelihood and criterion}
+\name{likelihood}
 \alias{logLik.wdm}
 \alias{deviance.wdm}
 \alias{AIC.wdm}

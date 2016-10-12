@@ -1,4 +1,4 @@
-\name{wiener diffusion model fit}
+\name{wdm}
 \alias{wdm}
 \alias{print.wdm}
 \title{Wiener Diffusion model fit function}
@@ -8,7 +8,8 @@
 }
 \usage{
   wdm(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL,
-    delta=NULL, xvar=NULL, start=NULL)
+    delta=NULL, xvar=NULL, start=NULL, fixed=0)
+  \method{vcov}{wdm}(object, \ldots, method="opg")
 }
 \arguments{
   \item{data}{is the data object containing data coming from a
@@ -29,6 +30,13 @@
   parameters separate for the given groups.}
   \item{start}{an optional vector with the four starting parameter values
   in the following order: alpha, tau, beta, delta.}  
+  \item{fixed}{a number indicating how many of the parameters are fixed
+    (not free). This number will be subtracted from the number of free
+    parameters. Defaults to 0.}  
+  \item{method}{the method to use for estimating the covariance matrix of
+    the parameter estimates. Options are \code{"opg"} for outer product of
+  gradients or \code{"hessian"} to use the hessian matrix from the
+  estimation routine. Defaults to \code{"opg"}.}  
 }
 \details{
   The \code{wdm} function calls an estimation routine, to estimate the

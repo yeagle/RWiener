@@ -1,4 +1,4 @@
-\name{wiener likelihood and criterion}
+\name{deprecated}
 \alias{wiener_likelihood}
 \alias{wiener_deviance}
 \alias{wiener_aic}

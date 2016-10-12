@@ -1,4 +1,4 @@
-\name{wiener plot}
+\name{plot}
 \alias{plot.data.wiener}
 \alias{wiener_plot}
 \title{Wiener plot function}

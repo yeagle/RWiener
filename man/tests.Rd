@@ -1,4 +1,4 @@
-\name{wiener diffusion model tests}
+\name{tests}
 \alias{anova.wdm}
 \alias{print.wlrt}
 \alias{waldtest}
