@@ -1,6 +1,7 @@
 \name{wdm}
 \alias{wdm}
 \alias{print.wdm}
+\alias{vcov.wdm}
 \title{Wiener Diffusion model fit function}
 \description{
   \code{wdm} creates parameter estimates for the four parameters
@@ -37,6 +38,10 @@
     the parameter estimates. Options are \code{"opg"} for outer product of
   gradients or \code{"hessian"} to use the hessian matrix from the
   estimation routine. Defaults to \code{"opg"}.}  
+  \item{object}{a wdm object file or a list containing a \code{$par}
+  vector with the model parameters, a \code{$data} data.frame with the data
+  and optionally a \code{$loss} function.}
+ \item{\dots}{arguments passed to methods.}
 }
 \details{
   The \code{wdm} function calls an estimation routine, to estimate the

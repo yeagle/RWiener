@@ -27,7 +27,7 @@ anova.wdm <- function(object, ..., test="LRT") {
         colnames(wtab) <- c("df", "AIC", "BIC", "logLik",
                             "LRT.G2", "LRT.df", "p-value <=")
         rownames(wtab) <- c(1,2) 
-        models <- as.character(c(cl[[2]], cl[[3]]))
+        models <- as.character(c(cl[[i]], cl[[i+1]]))
 
         wlrts <- list(
         G2 = G2, 

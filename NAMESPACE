@@ -6,7 +6,8 @@ importFrom("stats",
   "nlm", "optim",
   "pchisq",
   "coef", "nobs", 
-  "pnorm"
+  "pnorm",
+  "aggregate", "vcov"
 )
 importFrom("graphics", 
   "mtext", "par", "plot", "rug"

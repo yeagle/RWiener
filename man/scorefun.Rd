@@ -1,6 +1,8 @@
 \name{scorefun}
 \alias{scorefun}
 \alias{scorefun.wdm}
+\alias{estfun}
+\alias{estfun.wdm}
 \alias{infofun}
 \alias{infofun.wdm}
 \title{Extract Empirical Estimating Functions}
@@ -11,6 +13,7 @@
 \usage{
 scorefun(x, \dots)
 infofun(x, \dots)
+estfun(x, \dots)
 }
 \arguments{
  \item{x}{a fitted model object.}
@@ -31,6 +34,10 @@ The information function for a model - \code{infofun} - is the 2nd derivative of
 function with respect to the parameter vector. The empirical information functions is
 the evaluation of the information function at the observed data (\eqn{n} observations)
 and the estimated parameters (of dimension \eqn{k}).
+
+The \code{estfun} function is basically the score function, but with the
+additional functionality to sum up the scores by the given covariable
+\code{id} in the dataset.
 }
 
 \references{

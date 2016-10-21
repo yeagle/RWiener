@@ -16,6 +16,7 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
 
   # estimate parameters
   if (!is.null(xvar)) {
+    if(!is.factor(xvar)) stop("xvar has to be a factor")
     if(length(xvar)==1) {
       if(class(data[,xvar]) == "factor"){
         res <- list()
