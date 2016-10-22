@@ -73,9 +73,11 @@ print.wdm <- function(x, ...) {
   cat("Parameters:\n")
   print(x$coefficients)
   cat("\n")
-  cat("Hessian:\n")
-  print(x$hessian)
-  cat("\n")
+  if (!is.list(x$hessian)) {
+    cat("Hessian:\n")
+    print(x$hessian)
+    cat("\n")
+  }
   cat("log-Likelihood: ")
   print(x$loglik)
   cat("Convergence: ")

@@ -19,7 +19,11 @@ dwiener <- function(q, alpha,tau,beta,delta, resp="upper", give_log=FALSE)
   }
 
   if (!(length(resp) == length(q))) {
-    stop("arguments q and resp need to be of the same length")
+    if(length(resp) == 1) { 
+      resp <- rep(resp, length(q))
+      warning("arguments q and resp differ in length - using same resp for all q")
+    }
+    else stop("arguments q and resp need to be of the same length")
   }
 
   if(class(resp) == "factor") {

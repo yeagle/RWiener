@@ -16,7 +16,6 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
 
   # estimate parameters
   if (!is.null(xvar)) {
-    if(!is.factor(xvar)) stop("xvar has to be a factor")
     if(length(xvar)==1) {
       if(class(data[,xvar]) == "factor"){
         res <- list()
@@ -27,12 +26,13 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
           names(est$coefficients) <- paste(l,names(est$coefficients), sep=":")
           res$coefficients <- append(res$coefficients, est$coefficients)
           res$counts <- append(res$counts, est$counts)
+          res$algorithm <- append(res$algorithm, list(est$algorithm))
           res$convergence <- append(res$convergence, est$convergence)
           res$message <- append(res$message, est$message)
-          res$hessian <- append(res$hessian, est$hessian)
+          res$hessian <- append(res$hessian, list(est$hessian))
           res$loglik <- sum(res$loglik, est$loglik)
         }
-      }
+      } else stop("xvar has to be a factor")
     }
   }
   else
@@ -65,7 +65,6 @@ mle <- function(data, fpar=NULL, start=NULL) {
     est <- list(
       coefficients = fpar,
       data = data,
-      counts = NULL,
       convergence = NULL,
       hessian = NULL,
       algorithm = list(type="None (all parameters fixed)") )
@@ -75,7 +74,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
     ## only one parameter: use 'Brent (optim)'
     est <- optim(start,efn,data=data,fpar=fpar, method="Brent",
       lower=-100, upper=100, hessian=TRUE, control=list(maxit=2000))
-    est$algorithm <- list(type="Brent (optim)")
+    est$algorithm <- list(type="Brent (optim)", counts=est$counts, message=est$message)
     est$coefficients <- est$par
   }
   else
@@ -86,7 +85,7 @@ mle <- function(data, fpar=NULL, start=NULL) {
       error=function(e) NULL)
     if (!is.null(est)) {
       if (est$convergence == 0) {
-        est$algorithm <- list(type="BFGS (optim)")
+        est$algorithm <- list(type="BFGS (optim)", counts=est$counts, message=est$message)
         est$coefficients <- est$par
       }
       else est <- NULL
@@ -103,27 +102,26 @@ mle <- function(data, fpar=NULL, start=NULL) {
           est$value <- est$minimum; est$minimum <- NULL
           est$counts <- c(iterations=est$iterations); est$iterations <- NULL
           est$algorithm <- list(type="Newton-type (nlm)",
-            gradient=est$gradient); est$gradient <- NULL
+            gradient=est$gradient, counts=est$counts, message=est$message); est$gradient <- NULL
         }
         else est <- NULL
       }
     if (is.null(est)) {
         ## third: try 'Nelder-Mead (optim)'
         est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
-        est$algorithm <- list(type="Nelder-Mead")
+        est$algorithm <- list(type="Nelder-Mead", counts=est$counts, message=est$message)
         est$coefficients <- est$par
       }
     }
   }
+  est$message <- NULL; est$counts <- NULL
 
   par <- eparvec(est$coefficients, fpar)
 
   res <- list(
     coefficients = par,
     loglik = -est$value,
-    counts = est$counts,
     convergence = est$convergence,
-    message = est$message,
     hessian = est$hessian,
     algorithm = est$algorithm
   )
@@ -213,7 +211,7 @@ eparvec <- function(x, fpar=NULL) {
 
 ## additional functions
 
-vcov.wdm <- function(object, ..., method="opg") {
+vcov.wdm <- function(object, ..., method="hessian") {
   # opg-estimator (outer product of gradients)
   if (method=="opg")
     res <- solve(crossprod(scorefun(object)))
