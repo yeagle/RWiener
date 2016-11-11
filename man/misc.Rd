@@ -39,7 +39,10 @@ as.wiener(data, yvar=c("q", "resp"))
   and \code{"resp"} by default). \code{numdata.wiener} emulates a single
   variable representation by using a vector, that stores the responses for
   the upper boundary as positive numbers and the responses for the lower
-  boundary as negative numbers. 
+  boundary as negative numbers. This is similar to the transformation:
+  Y=(2D-1)RT; where Y is the single variable, that preserves all the
+  information from the decision variable D (1 or 0) and the reaction time
+  variable RT.
 
   The \code{as.wiener} function can be used to create wiener data objects
   (\code{data.wiener} or \code{numdata.wiener}), that can be used by

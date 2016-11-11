@@ -65,6 +65,9 @@ revamp.numdata.wiener <- function(data, ...) {
 revamp.data.wiener <- function(data, ...) {
   revampwiener(data, ...)
 }
+revamp.data.frame <- function(data, ...) {
+  revampwiener(data, ...)
+}
 
 print.wdm <- function(x, ...) {
   cat("Call:\n")

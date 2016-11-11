@@ -56,6 +56,7 @@ export (
 "revamp",
 "revamp.data.wiener",
 "revamp.numdata.wiener",
+"revamp.data.frame",
 "wiener_likelihood",
 "wiener_deviance",
 "wiener_aic",
@@ -83,6 +84,7 @@ S3method("vcov", "wdm")
 S3method("plot", "data.wiener")
 S3method("revamp", "data.wiener")
 S3method("revamp", "numdata.wiener")
+S3method("revamp", "data.frame")
 S3method("print", "wlrt")
 S3method("waldtest", "wdm")
 S3method("print", "wwaldt")
