@@ -6,6 +6,7 @@
 \alias{revamp}
 \alias{revamp.data.wiener}
 \alias{revamp.numdata.wiener}
+\alias{revamp.data.frame}
 \title{Miscellaneous Wiener Diffusion model functions}
 \description{
   Miscellaneous functions for the RWiener package.

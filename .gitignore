@@ -3,5 +3,5 @@ src/dwiener.o
 src/pwiener.o
 src/qwiener.o
 src/rwiener.o
-src/scorefuncs.o
+src/diffdensity.o
 src/symbols.rds

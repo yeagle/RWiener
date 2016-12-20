@@ -81,14 +81,14 @@ waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
   W2 <- ((pars[theta]-theta0)^2 / vars[theta])
   chisq <- pchisq(W2, 1, lower.tail=FALSE)
   # method 2: normal distribution
-  W <- (pars[theta]-theta0)/(sqrt(vars[theta]))
-  ND <- pnorm(W, lower.tail=FALSE)
+  W <- abs( (pars[theta]-theta0)/(sqrt(vars[theta])) )
+  ND <- 2 * pnorm(W, lower.tail=FALSE)
 
   res <- list(
   W2 = W2,
   W2.pvalue = chisq,
   W = W,
-  W.pvalue = ND,
+  pvalue = ND,
   test = list(theta=theta,theta0=theta0)
   )
 

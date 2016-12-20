@@ -41,16 +41,24 @@ scorefun.wdm <- function(x, ...) {
     else kappa <- klt
 
     if (y[i,2] == "lower") {
-      res[i,1] <- .Call(sclalpha, y[i,1], alpha, tau, beta, delta, lambda, kappa)
-      res[i,2] <- .Call(scltau, y[i,1], alpha, tau, beta, delta, lambda, kappa)
-      res[i,3] <- .Call(sclbeta, y[i,1], alpha, tau, beta, delta, lambda, kappa)
-      res[i,4] <- .Call(scldelta, y[i,1], alpha, tau, beta, delta, lambda, kappa)
+      res[i,1] <- .Call(diffalpha, y[i,1], alpha,tau,beta,delta, lambda, kappa) /
+                  .Call(dwiener_c, y[i,1], alpha,tau,beta,delta, FALSE)
+      res[i,2] <- .Call(difftau,   y[i,1], alpha,tau,beta,delta, lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,beta,delta, FALSE)
+      res[i,3] <- .Call(diffbeta,  y[i,1], alpha,tau,beta,delta,lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,beta,delta, FALSE)
+      res[i,4] <- .Call(diffdelta, y[i,1], alpha,tau,beta,delta, lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,beta,delta, FALSE)
     }
     else if (y[i,2] == "upper") {
-      res[i,1] <- .Call(sclalpha, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
-      res[i,2] <- .Call(scltau, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
-      res[i,3] <- .Call(sclbeta, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
-      res[i,4] <- .Call(scldelta, y[i,1], alpha, tau, 1-beta, -delta, lambda, kappa)
+      res[i,1] <- .Call(diffalpha, y[i,1], alpha,tau,1-beta,-delta, lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,1-beta,-delta, FALSE)
+      res[i,2] <- .Call(difftau,   y[i,1], alpha,tau,1-beta,-delta,lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,1-beta,-delta, FALSE)
+      res[i,3] <- .Call(diffbeta,  y[i,1], alpha,tau,1-beta,-delta,lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,1-beta,-delta, FALSE)
+      res[i,4] <- .Call(diffdelta, y[i,1], alpha,tau,1-beta,-delta, lambda, kappa) / 
+                  .Call(dwiener_c, y[i,1], alpha,tau,1-beta,-delta, FALSE)
     }
   }
 

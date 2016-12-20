@@ -2,7 +2,7 @@
 #include <Rinternals.h>
 #include <Rmath.h>
 
-// score funcs: 1st derivative
+// diff funcs: 1st derivative of density
 
 double fl01(double t, double beta, double lambda, double kappa) {
   double res = 0;
@@ -23,7 +23,7 @@ double fl01(double t, double beta, double lambda, double kappa) {
   return res;
 }
 
-double scl01tau(double t, double beta, double lambda, double kappa) {
+double diff01tau(double t, double beta, double lambda, double kappa) {
   double res = 0;
   double res2 = 0;
 
@@ -47,7 +47,7 @@ double scl01tau(double t, double beta, double lambda, double kappa) {
   return res;
 }
 
-double scl01beta(double t, double beta, double lambda, double kappa) {
+double diff01beta(double t, double beta, double lambda, double kappa) {
   double res = 0;
 
   if(lambda < 0) { // ST = small times
@@ -94,7 +94,7 @@ SEXP kappaST(SEXP t) {
   return value;
 }
 
-SEXP sclalpha(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
+SEXP diffalpha(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -115,7 +115,7 @@ SEXP sclalpha(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, 
   return value;
 }
 
-SEXP scltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
+SEXP difftau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -127,7 +127,7 @@ SEXP scltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SE
     - (1.0L/2.0L)*pow((REAL(delta)[0]), 2)*tx)/pow((REAL(alpha)[0]), 2) 
     - exp(-(REAL(alpha)[0])*(REAL(beta)[0])*(REAL(delta)[0]) 
     - (1.0L/2.0L)*pow((REAL(delta)[0]), 2)*tx)
-    * scl01tau((tx/pow((REAL(alpha)[0]),2)), (REAL(beta)[0]), (REAL(lambda)[0]), (REAL(kappa)[0]))
+    * diff01tau((tx/pow((REAL(alpha)[0]),2)), (REAL(beta)[0]), (REAL(lambda)[0]), (REAL(kappa)[0]))
     / pow((REAL(alpha)[0]), 4) );
 
   UNPROTECT(1);
@@ -135,7 +135,7 @@ SEXP scltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SE
   return value;
 }
 
-SEXP sclbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
+SEXP diffbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -147,7 +147,7 @@ SEXP sclbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, S
     - (1.0L/2.0L)*pow((REAL(delta)[0]), 2)*tx)/(REAL(alpha)[0]) 
     + exp(-(REAL(alpha)[0])*(REAL(beta)[0])*(REAL(delta)[0]) 
     - (1.0L/2.0L)*pow((REAL(delta)[0]), 2)*tx)
-    * scl01beta(tx, (REAL(beta)[0]), (REAL(lambda)[0]), (REAL(kappa)[0]))
+    * diff01beta(tx, (REAL(beta)[0]), (REAL(lambda)[0]), (REAL(kappa)[0]))
     / pow((REAL(alpha)[0]), 2) );
 
   UNPROTECT(1);
@@ -155,7 +155,7 @@ SEXP sclbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, S
   return value;
 }
 
-SEXP scldelta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
+SEXP diffdelta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SEXP kappa) {
   SEXP value;
   double tx = REAL(t)[0] - REAL(tau)[0];
 
@@ -247,7 +247,7 @@ SEXP inltau(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, SE
 
   REAL(value)[0] = ((1.0L/4.0L)*pow(REAL(delta)[0], 4)*fl01(tx/pow(REAL(alpha)[0],2), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0]) 
     - pow(REAL(delta)[0], 2)
-    * scl01tau((tx/pow(REAL(alpha)[0],2)), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])/pow(REAL(alpha)[0], 2)
+    * diff01tau((tx/pow(REAL(alpha)[0],2)), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])/pow(REAL(alpha)[0], 2)
     + inl01tau((tx/pow(REAL(alpha)[0],2)), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])
     /pow(REAL(alpha)[0], 4))*exp(-REAL(delta)[0]*(REAL(alpha)[0]*REAL(beta)[0] 
     + (1.0L/2.0L)*REAL(delta)[0]*tx))/pow(REAL(alpha)[0], 2);
@@ -265,7 +265,7 @@ SEXP inlbeta(SEXP t, SEXP alpha, SEXP tau, SEXP beta, SEXP delta, SEXP lambda, S
 
   REAL(value)[0] = (pow(REAL(delta)[0], 2)*fl01(tx/pow(REAL(alpha)[0],2), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0]) 
     - 2*REAL(delta)[0]
-    * scl01beta(tx/pow(REAL(alpha)[0],2), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])/REAL(alpha)[0] 
+    * diff01beta(tx/pow(REAL(alpha)[0],2), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])/REAL(alpha)[0] 
     + inl01beta(tx/pow(REAL(alpha)[0],2), REAL(beta)[0], REAL(lambda)[0], REAL(kappa)[0])
     /pow(REAL(alpha)[0], 2))*exp(-REAL(delta)[0]*(REAL(alpha)[0]*REAL(beta)[0] + (1.0L/2.0L)*REAL(delta)[0]*tx));
 

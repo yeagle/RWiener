@@ -91,7 +91,20 @@ mle <- function(data, fpar=NULL, start=NULL) {
       else est <- NULL
     }
     if (is.null(est)) {
-      ## second: try 'Newton-type (nlm)'
+      ## second: try 'Nelder-Mead (optim)', then 'BFGS (optim)'
+      opt <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
+      if (!is.null(opt)) {
+        est <- tryCatch(optim(opt$par,efn,data=data,fpar=fpar,
+          method="BFGS",hessian=TRUE, control=list(maxit=2000)), 
+          error=function(e) NULL)
+        if (!is.null(est) && est$convergence == 0) {
+            est$algorithm <- list(type="BFGS (optim) after Nelder-Mead", counts=est$counts, message=est$message)
+            est$coefficients <- est$par
+          }
+        }
+      }
+    if (is.null(est)) {
+      ## third: try 'Newton-type (nlm)'
       ## note: suppressWarnings used for nlm, as nlm inflates warning messages
       est <- tryCatch(suppressWarnings(nlm(efn,start,data=data,fpar=fpar,hessian=TRUE)),
         error=function(e) NULL)
@@ -106,12 +119,12 @@ mle <- function(data, fpar=NULL, start=NULL) {
         }
         else est <- NULL
       }
+    }
     if (is.null(est)) {
-        ## third: try 'Nelder-Mead (optim)'
-        est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
-        est$algorithm <- list(type="Nelder-Mead", counts=est$counts, message=est$message)
-        est$coefficients <- est$par
-      }
+      ## fourth: try 'Nelder-Mead (optim)'
+      est <- optim(start,efn,data=data,fpar=fpar, method="Nelder-Mead", control=list(maxit=2000))
+      est$algorithm <- list(type="Nelder-Mead", counts=est$counts, message=est$message)
+      est$coefficients <- est$par
     }
   }
   est$message <- NULL; est$counts <- NULL
@@ -216,7 +229,14 @@ vcov.wdm <- function(object, ..., method="hessian") {
   if (method=="opg")
     res <- solve(crossprod(scorefun(object)))
   else if (method=="hessian")
-    res <- solve(object$hessian)
+    if(is.list(object$hessian)) {
+      res <- list()
+      for (k in 1:length(object$hessian)) {
+        res[[k]] <- solve(object$hessian[[k]])
+      }
+    }
+    else
+      res <- solve(object$hessian)
   else 
     stop("Wrong method specified")
 

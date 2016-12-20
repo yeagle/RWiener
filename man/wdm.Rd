@@ -10,7 +10,7 @@
 \usage{
   wdm(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL,
     delta=NULL, xvar=NULL, start=NULL, fixed=0)
-  \method{vcov}{wdm}(object, \ldots, method="opg")
+  \method{vcov}{wdm}(object, \ldots, method="hessian")
 }
 \arguments{
   \item{data}{is the data object containing data coming from a
