@@ -2,10 +2,10 @@
 \alias{wdm}
 \alias{print.wdm}
 \alias{vcov.wdm}
-\title{Wiener Diffusion model fit function}
+\title{Wiener diffusion model fit function}
 \description{
   \code{wdm} creates parameter estimates for the four parameters
-  of the wiener model.
+  of the Wiener model.
 }
 \usage{
   wdm(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL,
@@ -14,7 +14,7 @@
 }
 \arguments{
   \item{data}{is the data object containing data coming from a
-  (hypothetical) Wiener Diffusion process. For further details on the data
+  (hypothetical) Wiener diffusion process. For further details on the data
   object, see \link{is.wiener}.}
   \item{yvar}{represents an optional vector, that can be used to define the
   names of the reaction time column. For further details on the data
@@ -37,7 +37,7 @@
   \item{method}{the method to use for estimating the covariance matrix of
     the parameter estimates. Options are \code{"opg"} for outer product of
   gradients or \code{"hessian"} to use the hessian matrix from the
-  estimation routine. Defaults to \code{"opg"}.}  
+  estimation routine. Defaults to \code{"hessian"}.}  
   \item{object}{a wdm object file or a list containing a \code{$par}
   vector with the model parameters, a \code{$data} data.frame with the data
   and optionally a \code{$loss} function.}

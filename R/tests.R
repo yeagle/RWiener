@@ -81,8 +81,8 @@ waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
   W2 <- ((pars[theta]-theta0)^2 / vars[theta])
   chisq <- pchisq(W2, 1, lower.tail=FALSE)
   # method 2: normal distribution
-  W <- abs( (pars[theta]-theta0)/(sqrt(vars[theta])) )
-  ND <- 2 * pnorm(W, lower.tail=FALSE)
+  W <- (pars[theta]-theta0)/(sqrt(vars[theta]))
+  ND <- 2 * pnorm(abs(W), lower.tail=FALSE)
 
   res <- list(
   W2 = W2,
@@ -98,7 +98,7 @@ waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
 
 print.wwaldt <- function(x, ...) {
   wtab <- rbind(c(x$W2, x$W2.pvalue), 
-                c(x$W, x$W.pvalue) )
+                c(x$W, x$pvalue) )
   colnames(wtab) <- c("Test-Statistic", "pvalue")
   rownames(wtab) <- c("W2","W") 
 
@@ -111,59 +111,4 @@ print.wwaldt <- function(x, ...) {
   cat("W ~ Normal Distribution; p-value: upper tail (two-tailed)\n")
   cat("\n")
   print(wtab[2,])
-}
-
-## H0: wdm
-wscoret <- function(object) {
-  sc <- scorefun(object)
-  info <- infofun(object)
-  n <- nobs(object)
-
-  LM2 <- 1/n * sum( sc^2/info ) 
-  #LM <- 1/sqrt(n) * sum( sc / sqrt(info))
-
-  Df <- 1
-  pvalue <- pchisq(LM2, Df, lower.tail=FALSE)
-
-  res <- list(
-  LM = LM2, 
-  pvalue = pvalue
-  )
-
-  return(res)
-}
-
-## internal function
-rootMatrix <- function(A) eigen(A)$vectors %*%
-                           sqrt(diag(eigen(A)$values)) %*%
-                           t(eigen(A)$vectors)
-
-## internal function
-cumScoreProc <- function(object) {
-  s <- scorefun(object)
-  n <- nobs(object)
-  I <- crossprod(s)/n # or: cov(s), or: info
-  res <- t(solve(rootMatrix(I)) %*% t(apply(s, 2, cumsum))) / sqrt(n)
-
-  return(res)
-}
-
-## H0: wdm
-wfluct <- function(object) {
-  n <- nobs(object)
-  npar <- object$npar
-  B <- cumScoreProc(object)
-
-  DM <- max(apply(abs(B), 1, max))                                 # DM
-  CvM <- sum(B^2)/n                                               # CvM
-  maxLM <- max(rowSums(B^2)[(npar+1):(n-npar)]/
-               (((npar+1):(n-npar)/n)*((npar+1):(n-npar)/n)))     # maxLM
-
-  res <- list(
-  DM = DM,
-  CvM = CvM,
-  maxLM = maxLM
-  )
-
-  return(res)
 }
