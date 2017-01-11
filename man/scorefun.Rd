@@ -5,8 +5,12 @@
 \alias{estfun.wdm}
 \title{Extract Empirical Estimating Functions}
 \description{
+ !EXPERIMENTAL FUNCTION!
+
  Generic function for extracting the empirical estimating functions
- of a fitted model.
+ of a fitted model. 
+
+ !EXPERIMENTAL FUNCTION!
 }
 \usage{
 scorefun(x, \dots)
@@ -50,4 +54,8 @@ scores <- scorefun(wdm1)
 
 ## print
 head(scores)
+
+## plot
+par(mfrow=c(2,2))
+plot(scores[,1]);plot(scores[,2]);plot(scores[,3]);plot(scores[,4])
 }

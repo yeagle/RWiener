@@ -46,6 +46,7 @@ wdm <- function(data, yvar=c("q", "resp"), alpha=NULL, tau=NULL, beta=NULL, delt
   res$estpar <- c("alpha"=is.null(alpha), "tau"=is.null(tau),
                    "beta"=is.null(beta), "delta"=is.null(delta))
   res$call <- cl
+  res$xvar <- xvar
   class(res) <- c("wdm")
   return(res)
 }
@@ -232,13 +233,82 @@ vcov.wdm <- function(object, ..., method="hessian") {
     if(is.list(object$hessian)) {
       res <- list()
       for (k in 1:length(object$hessian)) {
+        pnames <- paste0(levels(object$data[,object$xvar])[k], ":", names(object$estpar[object$estpar]))
         res[[k]] <- solve(object$hessian[[k]])
+        colnames(res[[k]]) <- pnames
+        rownames(res[[k]]) <- colnames(res[[k]])
       }
     }
-    else
+    else {
       res <- solve(object$hessian)
+      colnames(res) <- names(coef(object)[object$estpar])
+      rownames(res) <- colnames(res)
+    }
   else 
     stop("Wrong method specified")
 
   return(res)
+}
+
+confint.wdm <- function (object, parm, level = 0.95, ...) 
+{
+  if(is.list(object$hessian)) {
+    cf <- coef(object)
+    pnames <- names(cf)
+    if (missing(parm)) 
+        parm <- pnames
+    else if (is.numeric(parm)) 
+        parm <- pnames[parm]
+    a <- (1 - level)/2
+    a <- c(a, 1 - a)
+    pct <- paste0(a*100, " %")
+    fac <- qnorm(a)
+    ci <- array(NA, dim = c(length(parm), 2L), dimnames = list(parm, 
+        pct))
+    ses <- vector()
+    for (k in 1:length(vcov(object))) {
+      ses <- c(ses,sqrt(diag(vcov(object)[[k]])))
+    }
+    ses <- ses[parm]
+    ci[] <- cf[parm] + ses %o% fac
+    ci
+  }
+  else 
+    confint.default(object, parm, level, ...)
+}
+
+summary.wdm <- function(object, ...) {
+  coef <- coef(object)
+  if(is.list(vcov(object))) {
+    sds <- vector()
+    for (k in 1:length(vcov(object))) {
+      sds <- c(sds,sqrt(diag(vcov(object)[[k]])))
+    }
+  }
+  else 
+    sds <- sqrt(diag(vcov(object)))
+  aic <- AIC(object)
+  bic <- BIC(object)
+  loglik <- logLik(object)
+  cint <- confint(object)
+
+  res <- list(coef=coef, sd=sds, 
+              aic=aic, bic=bic, loglik=loglik,
+              cint=cint)
+  class(res) <- c(class(res), "summary.wdm")
+  return(res)
+}
+
+print.summary.wdm <- function(x, ...){
+  cat("\nCoefficients:\n")
+  print(x$coef)
+  cat("\n")
+  cat("\nStandard deviation of estimated parameters:\n")
+  print(x$sd)
+  cat("\n")
+  cat("\nConfidence Intervalls:\n")
+  print(x$cint)
+  cat("\n")
+  cat("log-likelihood: ", x$loglik, "\nAIC: ", x$aic, "\nBIC: ", x$bic)
+  cat("\n")
 }

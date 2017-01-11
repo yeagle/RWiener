@@ -2,6 +2,9 @@
 \alias{wdm}
 \alias{print.wdm}
 \alias{vcov.wdm}
+\alias{confint.wdm}
+\alias{summary.wdm}
+\alias{print.summary.wdm}
 \title{Wiener diffusion model fit function}
 \description{
   \code{wdm} creates parameter estimates for the four parameters
@@ -65,6 +68,9 @@
   that is \code{TRUE} if the respective parameter was estimated and
   \code{FALSE} if the respective parameter was set to a fixed value.
   Additional information is given in other list objects.
+
+  The standard R functions \code{coef}, \code{vcov}, \code{confint},
+  \code{summary} can be used with \code{wdm} objects.
   }
 %\references{} 
 %\note{}

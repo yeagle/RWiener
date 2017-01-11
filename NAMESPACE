@@ -7,7 +7,8 @@ importFrom("stats",
   "pchisq",
   "coef", "nobs", 
   "pnorm",
-  "aggregate", "vcov"
+  "aggregate", "vcov", "confint",
+  "confint.default", "qnorm"
 )
 importFrom("graphics", 
   "mtext", "par", "plot", "rug"
@@ -51,8 +52,10 @@ export (
 "wiener_bic",
 "wiener_plot",
 "anova.wdm",
-"print.wlrt",
 "vcov.wdm",
+"confint.wdm",
+"summary.wdm",
+"print.summary.wdm",
 "waldtest",
 "waldtest.wdm",
 "print.wwaldt"
@@ -68,10 +71,12 @@ S3method("estfun", "wdm")
 S3method("scorefun", "wdm")
 S3method("anova", "wdm")
 S3method("vcov", "wdm")
+S3method("confint", "wdm")
+S3method("summary", "wdm")
+S3method("print", "summary.wdm")
 S3method("plot", "data.wiener")
 S3method("revamp", "data.wiener")
 S3method("revamp", "numdata.wiener")
 S3method("revamp", "data.frame")
-S3method("print", "wlrt")
 S3method("waldtest", "wdm")
 S3method("print", "wwaldt")

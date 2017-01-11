@@ -7,63 +7,50 @@ anova.wdm <- function(object, ..., test="LRT") {
       else {
         wdmspecific <- eval(cl[[i]])
         wdmgeneral <- eval(cl[[i+1]])
-        
+
         G2 <- 2 * ( logLik(wdmgeneral)-logLik(wdmspecific) )
         Df <- wdmgeneral$npar - wdmspecific$npar
         pvalue <- pchisq(G2, Df, lower.tail=FALSE)
-
-        pvalue2 <- 1
-        if (pvalue <= 0.10) pvalue2 <- 0.05
-        if (pvalue <= 0.05) pvalue2 <- 0.05
-        if (pvalue <= 0.01) pvalue2 <- 0.01
-        if (pvalue <= 0.001) pvalue2 <- 0.001
-
-        wtab <- rbind(as.double(c(wdmspecific$npar, 
-                        round(c(AIC(wdmspecific), BIC(wdmspecific), logLik(wdmspecific)), 4),
-                        " ", " ", " ")),
-                      as.double(c(wdmgeneral$npar, 
-                        round(c(AIC(wdmgeneral), BIC(wdmgeneral), logLik(wdmgeneral)), 4),
-                        round(c(G2, Df, pvalue2), 4))) )
-        colnames(wtab) <- c("df", "AIC", "BIC", "logLik",
-                            "LRT.G2", "LRT.df", "p-value <=")
-        rownames(wtab) <- c(1,2) 
         models <- as.character(c(cl[[i]], cl[[i+1]]))
 
-        wlrts <- list(
-        G2 = G2, 
-        Df = Df,
-        pvalue = pvalue,
-        models = models,
-        table = wtab
-        )
-
-        if (i == 2) res <- wlrts
+        if (i == 2) {
+          res <- list(
+          models = models,
+          modeldf = c(wdmspecific$npar, wdmgeneral$npar),
+          model.AIC = c(AIC(wdmspecific), AIC(wdmgeneral)),
+          model.BIC = c(BIC(wdmspecific), BIC(wdmgeneral)),
+          model.loglik = c(logLik(wdmspecific), logLik(wdmgeneral)),
+          G2 = c(NA, G2), 
+          Df = c(NA, Df),
+          pvalue = c(NA, pvalue)
+          )
+        }
         else {
-          res$table <- rbind(res$table, wlrts$table[2,])
-          res$models <- c(res$models, wlrts$models[2])
-          res$G2 <- c(res$G2, wlrts$G2)
-          res$Df <- c(res$Df, wlrts$Df)
-          res$pvalue <- c(res$pvalue, wlrts$pvalue)
+          res$modeldf <- c(res$modeldf, wdmgeneral$npar)
+          res$models <- c(res$models, models[2])
+          res$model.AIC <- c(res$model.AIC, AIC(wdmgeneral))
+          res$model.BIC <- c(res$model.BIC, BIC(wdmgeneral))
+          res$model.loglik <- c(res$model.loglik, logLik(wdmgeneral))
+          res$G2 <- c(res$G2, G2)
+          res$Df <- c(res$Df, Df)
+          res$pvalue <- c(res$pvalue, pvalue)
         }
       }
     } # end for loop
-
-    rownames(res$table) <- 1:length(res$table[,1])
-    res$call <- cl
-    class(res) <- c(class(res),"wlrt", "anova")
-    return(res)
   } # end if(test==LRT)
   else stop("Only LRT Test implemented yet")
-}
 
-print.wlrt <- function(x, ...) {
-  cat("\n")
-  for (i in 1:length(x$models)) {
-    cat("Model ", i, ": ", x$models[i], sep="")
-    cat("\n")
-  }
-  cat("\n")
-  print(x$table)
+  out <- data.frame(df = res$modeldf, 
+                    AIC = res$model.AIC, BIC = res$model.BIC, logLik = res$model.loglik,
+                    Df = res$Df, LRT.G2 = res$G2,
+                    pvalue = res$pvalue)
+  dimnames(out) <- list(1:length(res$models), c("Model.df", "AIC", "BIC", "logLik",
+                            "LRT.df", "LRT.G2", "p.value"))
+  structure(out,
+              heading = c("Model comparison Table with LRTs\n",
+                          paste0("Model ", 1:length(res$models), ": ",
+                                 res$models, collapse = "\n"),""),
+  class = c("anova", "data.frame"))
 }
 
 ## define waldtest function to be generic
@@ -99,7 +86,7 @@ waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
 print.wwaldt <- function(x, ...) {
   wtab <- rbind(c(x$W2, x$W2.pvalue), 
                 c(x$W, x$pvalue) )
-  colnames(wtab) <- c("Test-Statistic", "pvalue")
+  colnames(wtab) <- c("Test-Statistic", "p.value")
   rownames(wtab) <- c("W2","W") 
 
   cat("\n")
@@ -108,7 +95,7 @@ print.wwaldt <- function(x, ...) {
   cat("Null hypothesis: ", x$test$theta, "=", x$test$theta0 , sep="")
   cat("\n")
   #cat("W2 ~ Chisq, Df=1; p-value: upper tail (one-tailed)\n")
-  cat("W ~ Normal Distribution; p-value: upper tail (two-tailed)\n")
+  cat("W ~ Normal Distribution\n")
   cat("\n")
   print(wtab[2,])
 }

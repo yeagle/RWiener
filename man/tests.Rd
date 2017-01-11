@@ -1,6 +1,5 @@
 \name{tests}
 \alias{anova.wdm}
-\alias{print.wlrt}
 \alias{waldtest}
 \alias{waldtest.wdm}
 \alias{print.wwaldt}
