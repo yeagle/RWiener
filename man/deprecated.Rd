@@ -66,7 +66,7 @@ wiener_deviance(c(3,.3,.5,0.5), dat)
 wiener_likelihood(c(3,.3,.5,0), dat)-wiener_likelihood(c(3,.3,.5,0.5), dat)
 
 \dontrun{%
-### Example 3: Likelihood-Ratio-Test and Wald-Test
+### Example 3: likelihood-ratio test and Wald test
 ## Suppose we have data from 2 conditions
 dat1 <- rwiener(100,2,.3,.5,-.5)
 dat2 <- rwiener(100,2,.3,.5,.5)
@@ -77,10 +77,10 @@ model_ll <- function(pars,delta,dat1,dat2) {
   wiener_likelihood(pars,dat1)+
     wiener_likelihood(c(pars[1:3],pars[4]+delta),dat2)
 }
-## Likelihood ratio test
+## likelihood-ratio test
 ## 0-model: delta=0; alt-model: delta=1
 model_ll(est1$par,1,dat1,dat2)
-## compute Likelihood ratio
+## compute likelihood ratio
 LR <- -2*model_ll(est1$par,0,dat1,dat2)+2*model_ll(est1$par,1,dat1,dat2)
 ## compare with critical X^2(1) quantile, alpha=0.05
 LR > qchisq(0.95,1)

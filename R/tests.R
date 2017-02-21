@@ -44,8 +44,8 @@ anova.wdm <- function(object, ..., test="LRT") {
                     AIC = res$model.AIC, BIC = res$model.BIC, logLik = res$model.loglik,
                     Df = res$Df, LRT.G2 = res$G2,
                     pvalue = res$pvalue)
-  dimnames(out) <- list(1:length(res$models), c("Model.df", "AIC", "BIC", "logLik",
-                            "LRT.df", "LRT.G2", "p.value"))
+  dimnames(out) <- list(1:length(res$models), c("df", "AIC", "BIC", "logLik",
+                            "LRT.df", "LRT.G2", "pvalue"))
   structure(out,
               heading = c("Model comparison Table with LRTs\n",
                           paste0("Model ", 1:length(res$models), ": ",
@@ -86,7 +86,7 @@ waldtest.wdm <- function(object, ..., theta="delta", theta0=0) {
 print.wwaldt <- function(x, ...) {
   wtab <- rbind(c(x$W2, x$W2.pvalue), 
                 c(x$W, x$pvalue) )
-  colnames(wtab) <- c("Test-Statistic", "p.value")
+  colnames(wtab) <- c("Test-Statistic", "pvalue")
   rownames(wtab) <- c("W2","W") 
 
   cat("\n")
