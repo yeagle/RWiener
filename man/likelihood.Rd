@@ -54,6 +54,7 @@ AIC(wdm1)
 BIC(wdm1)
 deviance(wdm1)
 
+\dontrun{
 ## estimate parameters by calling optim manually
 ## first define necessary wrapper function
 nll <- function(x, data) { 
@@ -69,6 +70,7 @@ wdm2 <- wdm(dat, alpha=est$par[1], tau=est$par[2], beta=est$par[3],
   delta=est$par[4])
 ## now the generic functions can be used again
 logLik(wdm2)
+}
 }
 \keyword{logLik.wdm}
 \keyword{deviance.wdm}

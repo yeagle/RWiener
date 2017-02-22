@@ -17,6 +17,8 @@
   \item{test}{Statistical test to calculate, so far the only option is a
   likelihood-ratio test (LRT).}
  \item{\dots}{Further model objects or other arguments passed to methods.}
+  \item{theta}{the name of the parameter to be tested.}
+  \item{theta0}{the value of the parameter under the null hypothesis.}
 }
 \details{
   The \code{anova.wdm} function calls the specified test and calculates the
