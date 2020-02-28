@@ -33,8 +33,8 @@
 %\author{}
 \examples{
 # a random dataset
-dat <- rbind(cbind(rwiener(100, 2,.3,.5,0), grp="A"),
-cbind(rwiener(100,2,.3,.5,1), grp="B"))
+dat <- rbind(cbind(rwiener(100, 2,.3,.5,0), grp=factor("A", c("A","B"))),
+cbind(rwiener(100,2,.3,.5,1), grp=factor("B", c("A","B"))))
 
 # create nested wdm model objects (from specific to general)
 wdm1 <- wdm(dat)

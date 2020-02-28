@@ -77,8 +77,8 @@
 %\author{}
 \examples{
 ## generate random data
-dat <- rbind(cbind(rwiener(100, 2,.3,.5,1), group="A"),
-        cbind(rwiener(100,2,.3,.5,-1), group="B"))
+dat <- rbind(cbind(rwiener(100, 2,.3,.5,1), group=factor("A", c("A","B"))),
+        cbind(rwiener(100,2,.3,.5,-1), group=factor("B", c("A", "B"))))
 
 ## fit wdm
 wdm1 <- wdm(dat)
