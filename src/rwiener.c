@@ -42,7 +42,7 @@ double r_rejection_based(double a, double ter, double z, double v)
   Aupper,Alower,radius,lambda,F,prob,tt,dir_,l,s1,s2,tnew,t_delta;
   int uu;
   int finish;
-  double t, r;
+  double t=0, r;
   
   a/=10;
   z/=10;

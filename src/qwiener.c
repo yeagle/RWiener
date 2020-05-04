@@ -57,7 +57,6 @@ double qwiener_d(double p, double alpha, double tau, double beta, double delta)
       pmax = pmid;
       qmax = q;
       q = qmin + (qmax-qmin)/2;
-      pmin = pmin; // to avoid compiler warnings
     }
     else { // near upper point
       pmin = pmid;
@@ -66,7 +65,6 @@ double qwiener_d(double p, double alpha, double tau, double beta, double delta)
         q = qmin + (qmax-qmin)/2;
       else
         q = q*10;
-      pmax = pmax; // to avoid compiler warnings
     }
     if(R_IsNaN(pmid)) return R_NaN;
     if(q>=1e+10) return R_PosInf;
